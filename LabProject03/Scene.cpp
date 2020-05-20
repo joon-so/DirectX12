@@ -163,10 +163,10 @@ void CScene::BuildBullet(CPlayer& pPlayer, int iChooseBullet)
 	m_ppObjects[m_nObjects + iChooseBullet]->SetPosition(pPlayer.m_xmf3Position);
 	m_ppObjects[m_nObjects + iChooseBullet]->SetRotationAxis(XMFLOAT3(0.0f, 0.0f, 1.0f));
 	m_ppObjects[m_nObjects + iChooseBullet]->SetRotationSpeed(200.0f);
-	//m_ppObjects[m_nObjects + iChooseBullet]->SetMovingDirection(XMFLOAT3(0.0f, 0.0f, 1.0f));
-	//m_ppObjects[m_nObjects + iChooseBullet]->SetMovingSpeed(50.0f);
+	m_ppObjects[m_nObjects + iChooseBullet]->SetMovingDirection(XMFLOAT3(0.0f, 0.0f, 1.0f));
+	m_ppObjects[m_nObjects + iChooseBullet]->SetMovingSpeed(50.0f);
 
-	m_ppObjects[m_nObjects + iChooseBullet]->BulletDirection(m_pPlayer->m_xmf3Velocity, m_pPlayer->m_xmf3Position);
+	//m_ppObjects[m_nObjects + iChooseBullet]->BulletDirection();
 }
 
 
@@ -177,14 +177,6 @@ void CScene::ReleaseObjects()
 			delete m_ppObjects[i];
 	if (m_ppObjects) 
 		delete[] m_ppObjects;
-
-	//for (int i = 0; i < m_nObjects; i++) 
-	//	if (m_ppObjects[i]) 
-	//		delete m_ppObjects[i];
-	//
-	//for (int i = 25; i < m_nObjects; i++)
-	//	if (m_ppObjects[i]->m_xmf4x4World._43 > 50.0f)
-	//		delete m_ppObjects[i];
 
 	if (m_ppObjects) 
 		delete[] m_ppObjects;

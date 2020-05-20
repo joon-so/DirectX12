@@ -24,7 +24,7 @@ public:
 	float m_fRotationSpeed = 0.0f;
 	//
 	bool bBulletcheck = false;
-	XMFLOAT3 m_xmf3BulletLook = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	//XMFLOAT3 m_xmf3BulletLook = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 public:
 	void SetMesh(CMesh* pMesh)
@@ -54,9 +54,8 @@ public:
 	virtual void Animate(float fElapsedTime);
 	virtual void Render(HDC hDCFrameBuffer, CCamera* pCamera);
 	//
-	void BulletDirection(XMFLOAT3& m_xmf3Velocity, XMFLOAT3& m_xmf3Position);
+	//void BulletDirection();
 
-	void BulletDirection(const XMFLOAT3& xmf3Shift, XMFLOAT3& m_xmf3Velocity, 
-		XMFLOAT3& m_xmf3Position, bool bUpdateVelocity);
+	//void BulletDirection(const XMFLOAT3& xmf3Shift);
 };
 
