@@ -120,6 +120,7 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 		case VK_CONTROL:		
 			//ÃÑ¾Ë ¹ß»ç
 			if (m_pScene->m_nObjects + m_pScene->m_nBullets < 198) {
+				//m_pScene->BuildBullet(*m_pPlayer, m_pScene->m_nBullets);
 				m_pScene->BuildBullet(*m_pPlayer, m_pScene->m_nBullets);
 				m_pScene->m_nBullets++;
 			}

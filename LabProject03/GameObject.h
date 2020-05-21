@@ -11,7 +11,7 @@ public:
 public:
 	bool m_bActive = true;
 	CMesh* m_pMesh = NULL;
-	//취치_41,_42,_43
+	//위치_41,_42,_43
 	XMFLOAT4X4 m_xmf4x4World = Matrix4x4::Identity();
 
 	DWORD m_dwColor = RGB(255, 0, 0);
@@ -24,7 +24,10 @@ public:
 	float m_fRotationSpeed = 0.0f;
 	//
 	bool bBulletcheck = false;
-	//XMFLOAT3 m_xmf3BulletLook = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	XMFLOAT3 m_xmf3BulletLook = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	//XMFLOAT3 m_xmf3Right = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	//XMFLOAT3 m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);
+	//XMFLOAT3 m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 public:
 	void SetMesh(CMesh* pMesh)
@@ -54,8 +57,10 @@ public:
 	virtual void Animate(float fElapsedTime);
 	virtual void Render(HDC hDCFrameBuffer, CCamera* pCamera);
 	//
-	//void BulletDirection();
+	void BulletMove();
+	void BulletMove(const XMFLOAT3& xmf3Shift);
 
-	//void BulletDirection(const XMFLOAT3& xmf3Shift);
+	//void LookAt(const CPlayer& pPlayer, XMFLOAT3& xmf3LookAt, XMFLOAT3& xmf3Up);
+	//void OnUpdateTransform();
 };
 

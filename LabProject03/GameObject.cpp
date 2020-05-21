@@ -20,24 +20,54 @@ void CGameObject::SetPosition(XMFLOAT3& xmf3Position)
 	m_xmf4x4World._43 = xmf3Position.z;
 }
 
+
 void CGameObject::SetMovingDirection(const XMFLOAT3& xmf3MovingDirection)
 {
 	XMStoreFloat3(&m_xmf3MovingDirection, XMVector3Normalize(XMLoadFloat3(&xmf3MovingDirection)));
 }
+//mPlayer vector ¶û mObject vector º¹»ç
 
-//void CGameObject::BulletDirection()
+void CGameObject::BulletMove()
+{
+	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
+	XMStoreFloat3(&xmf3Shift, XMVectorAdd(XMLoadFloat3(&xmf3Shift), XMVectorScale(XMLoadFloat3(&m_xmf3BulletLook), 50.0f)));
+	BulletMove(xmf3Shift);
+}
+
+void CGameObject::BulletMove(const XMFLOAT3& xmf3Shift)
+{
+	XMFLOAT3 m_xmf3Position{ m_xmf4x4World._41, m_xmf4x4World._42 ,m_xmf4x4World._43 };
+	XMStoreFloat3(&m_xmf3Position, XMVectorAdd(XMLoadFloat3(&m_xmf3Position), XMLoadFloat3(&xmf3Shift)));
+	SetPosition(m_xmf3Position);
+}
+
+//
+
+//void CGameObject::LookAt(const CPlayer& pPlayer,XMFLOAT3& xmf3LookAt, XMFLOAT3& xmf3Up)
 //{
-//	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
-//	XMStoreFloat3(&xmf3Shift, XMVectorAdd(XMLoadFloat3(&xmf3Shift), XMVectorScale(XMLoadFloat3(&m_xmf3BulletLook), 50.0f)));
-//	BulletDirection(xmf3Shift);
+//	XMFLOAT4X4 xmf4x4View;
+//	XMStoreFloat4x4(&xmf4x4View, XMMatrixLookAtLH(XMLoadFloat3(&m_xmf3Position), XMLoadFloat3(&xmf3LookAt), XMLoadFloat3(&xmf3Up)));
+//
+//	XMVECTORF32 xmf32vRight = { xmf4x4View._11, xmf4x4View._21, xmf4x4View._31, 0.0f };
+//	XMVECTORF32 xmf32vUp = { xmf4x4View._12, xmf4x4View._22, xmf4x4View._32, 0.0f };
+//	XMVECTORF32 xmf32vLook = { xmf4x4View._13, xmf4x4View._23, xmf4x4View._33, 0.0f };
+//
+//	XMStoreFloat3(&m_xmf3Right, XMVector3Normalize(xmf32vRight));
+//	XMStoreFloat3(&m_xmf3Up, XMVector3Normalize(xmf32vUp));
+//	XMStoreFloat3(&m_xmf3Look, XMVector3Normalize(xmf32vLook));
 //}
 //
-//void CGameObject::BulletDirection(const XMFLOAT3& xmf3Shift)
+//void CGameObject::OnUpdateTransform()
 //{
-//	XMFLOAT3 m_xmf3Position{ m_xmf4x4World._41, m_xmf4x4World._42 ,m_xmf4x4World._43 };
-//	XMStoreFloat3(&m_xmf3Position, XMVectorAdd(XMLoadFloat3(&m_xmf3Position), XMLoadFloat3(&xmf3Shift)));
-//	SetPosition(m_xmf3Position);
+//	m_xmf4x4World._11 = m_xmf3Right.x; m_xmf4x4World._12 = m_xmf3Right.y; m_xmf4x4World._13 = m_xmf3Right.z;
+//	m_xmf4x4World._21 = m_xmf3Up.x; m_xmf4x4World._22 = m_xmf3Up.y;
+//	m_xmf4x4World._23 = m_xmf3Up.z;
+//	m_xmf4x4World._31 = m_xmf3Look.x; m_xmf4x4World._32 = m_xmf3Look.y;
+//	m_xmf4x4World._33 = m_xmf3Look.z;
+//	//m_xmf4x4World._41 = m_xmf3Position.x; m_xmf4x4World._42 = m_xmf3Position.y; m_xmf4x4World._43 = m_xmf3Position.z;
 //}
+
+//±îÁö
 
 void CGameObject::SetRotationAxis(const XMFLOAT3& xmf3RotationAxis)
 {

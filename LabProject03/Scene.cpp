@@ -160,7 +160,10 @@ void CScene::BuildObjects(CPlayer& pPlayer)
 
 void CScene::BuildBullet(CPlayer& pPlayer, int iChooseBullet)
 {
+	//m_ppObjects[m_nObjects + iChooseBullet]->Rotate(pPlayer.m_fPitch, pPlayer.m_fYaw, pPlayer.m_fRoll);
+
 	m_ppObjects[m_nObjects + iChooseBullet]->SetPosition(pPlayer.m_xmf3Position);
+	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf4x4World = pPlayer.m_xmf4x4World;		//플레이어의 벡터 복사 -> 날아가는 방향 조절
 	m_ppObjects[m_nObjects + iChooseBullet]->SetRotationAxis(XMFLOAT3(0.0f, 0.0f, 1.0f));
 	m_ppObjects[m_nObjects + iChooseBullet]->SetRotationSpeed(200.0f);
 	m_ppObjects[m_nObjects + iChooseBullet]->SetMovingDirection(XMFLOAT3(0.0f, 0.0f, 1.0f));
