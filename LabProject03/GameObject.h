@@ -59,7 +59,6 @@ public:
 	virtual void Render(HDC hDCFrameBuffer, CCamera* pCamera);
 	//
 	void BulletMove();
-	void BulletMove(const XMFLOAT3& xmf3Shift);
 
 	//void LookAt(const CPlayer& pPlayer, XMFLOAT3& xmf3LookAt, XMFLOAT3& xmf3Up);
 	//void OnUpdateTransform();

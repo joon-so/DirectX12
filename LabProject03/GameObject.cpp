@@ -31,13 +31,8 @@ void CGameObject::SetMovingDirection(const XMFLOAT3& xmf3MovingDirection)
 void CGameObject::BulletMove()
 {
 	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
-	XMStoreFloat3(&xmf3Shift, XMVectorAdd(XMLoadFloat3(&xmf3Shift), XMVectorScale(XMLoadFloat3(&m_xmf3BulletLook), 1.5f)));
-	BulletMove(xmf3Shift);
-}
-
-void CGameObject::BulletMove(const XMFLOAT3& xmf3Shift)
-{
 	XMFLOAT3 m_xmf3Position{ m_xmf4x4World._41, m_xmf4x4World._42 ,m_xmf4x4World._43 };
+	XMStoreFloat3(&xmf3Shift, XMVectorAdd(XMLoadFloat3(&xmf3Shift), XMVectorScale(XMLoadFloat3(&m_xmf3BulletLook), 1.5f)));
 	XMStoreFloat3(&m_xmf3Position, XMVectorAdd(XMLoadFloat3(&m_xmf3Position), XMLoadFloat3(&xmf3Shift)));
 	SetPosition(m_xmf3Position);
 }
