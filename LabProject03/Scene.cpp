@@ -151,8 +151,8 @@ void CScene::BuildObjects(CPlayer& pPlayer)
 		m_ppObjects[i]->SetMesh(pBulletMesh);
 		m_ppObjects[i]->SetColor(RGB(255, 0, 0));
 		m_ppObjects[i]->SetPosition(0.0f, -100000.0f, 0.0f);
-		m_ppObjects[i]->SetRotationAxis(XMFLOAT3(0.0f, 0.0f, 0.0f));
-		m_ppObjects[i]->SetRotationSpeed(0.0f);
+		m_ppObjects[i]->SetRotationAxis(XMFLOAT3(0.0f, 1.0f, 0.0f));
+		m_ppObjects[i]->SetRotationSpeed(300.0f);
 		m_ppObjects[i]->SetMovingDirection(XMFLOAT3(0.0f, 0.0f, 0.0f));
 		m_ppObjects[i]->SetMovingSpeed(0.0f);
 	}
@@ -160,16 +160,19 @@ void CScene::BuildObjects(CPlayer& pPlayer)
 
 void CScene::BuildBullet(CPlayer& pPlayer, int iChooseBullet)
 {
-	//m_ppObjects[m_nObjects + iChooseBullet]->Rotate(pPlayer.m_fPitch, pPlayer.m_fYaw, pPlayer.m_fRoll);
-
 	m_ppObjects[m_nObjects + iChooseBullet]->SetPosition(pPlayer.m_xmf3Position);
 	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf4x4World = pPlayer.m_xmf4x4World;		//플레이어의 벡터 복사 -> 날아가는 방향 조절
-	m_ppObjects[m_nObjects + iChooseBullet]->SetRotationAxis(XMFLOAT3(0.0f, 0.0f, 1.0f));
-	m_ppObjects[m_nObjects + iChooseBullet]->SetRotationSpeed(200.0f);
-	m_ppObjects[m_nObjects + iChooseBullet]->SetMovingDirection(XMFLOAT3(0.0f, 0.0f, 1.0f));
-	m_ppObjects[m_nObjects + iChooseBullet]->SetMovingSpeed(50.0f);
-
+	//m_ppObjects[m_nObjects + iChooseBullet]->SetRotationAxis(XMFLOAT3(0.0f, 0.0f, 1.0f));
+	//m_ppObjects[m_nObjects + iChooseBullet]->SetRotationSpeed(200.0f);
+	//m_ppObjects[m_nObjects + iChooseBullet]->SetMovingDirection(XMFLOAT3(0.0f, 0.0f, 1.0f));
+	//m_ppObjects[m_nObjects + iChooseBullet]->SetMovingSpeed(1.0f);
+	//
 	//m_ppObjects[m_nObjects + iChooseBullet]->BulletDirection();
+
+	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf3BulletLook = pPlayer.m_xmf3Look;
+	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf3BulletUp = pPlayer.m_xmf3Up;
+	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf3BulletRight = pPlayer.m_xmf3Right;
+	m_ppObjects[m_nObjects + iChooseBullet]->bShootcheck = true;
 }
 
 
@@ -185,21 +188,6 @@ void CScene::ReleaseObjects()
 		delete[] m_ppObjects;
 }
 
-//void CScene::ShootBullets()
-//{
-//	CCubeMesh* pBulletMesh = new CCubeMesh(0.8f, 0.8f, 0.8f);
-//
-//	for (int i = 0; i < m_nBullets; i++) {
-//		m_ppBullets[i] = new CGameObject();
-//		m_ppBullets[i]->SetMesh(pBulletMesh);
-//		m_ppBullets[i]->SetColor(RGB(255, 0, 0));
-//		m_ppBullets[i]->SetPosition(0.0f, 0.0f, i * 2.0f);
-//		m_ppBullets[i]->SetRotationAxis(XMFLOAT3(0.0f, .0f, 1.0f));
-//		m_ppBullets[i]->SetRotationSpeed(200.0f);
-//		m_ppBullets[i]->SetMovingDirection(XMFLOAT3(0.0f, 0.0f, 1.0f));
-//		m_ppBullets[i]->SetMovingSpeed(30.0f);
-//	}
-//}
 //
 //void CScene::ReleaseBullets()
 //{

@@ -25,12 +25,13 @@ void CGameObject::SetMovingDirection(const XMFLOAT3& xmf3MovingDirection)
 {
 	XMStoreFloat3(&m_xmf3MovingDirection, XMVector3Normalize(XMLoadFloat3(&xmf3MovingDirection)));
 }
+
 //mPlayer vector ¶û mObject vector º¹»ç
 
 void CGameObject::BulletMove()
 {
 	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
-	XMStoreFloat3(&xmf3Shift, XMVectorAdd(XMLoadFloat3(&xmf3Shift), XMVectorScale(XMLoadFloat3(&m_xmf3BulletLook), 50.0f)));
+	XMStoreFloat3(&xmf3Shift, XMVectorAdd(XMLoadFloat3(&xmf3Shift), XMVectorScale(XMLoadFloat3(&m_xmf3BulletLook), 1.5f)));
 	BulletMove(xmf3Shift);
 }
 
@@ -99,12 +100,16 @@ void CGameObject::Move(XMFLOAT3& vDirection, float fSpeed)
 			SetRotationSpeed(0.0f);
 			SetMovingDirection(XMFLOAT3(0.0f, 0.0f, 0.0f));
 			SetMovingSpeed(0.0f);
+			bShootcheck = false;
 		}
 	}
 }
 
 void CGameObject::Animate(float fElapsedTime)
 {
+	if (bShootcheck == true) {
+		BulletMove();
+	}
 	if (m_fRotationSpeed != 0.0f) 
 		Rotate(m_xmf3RotationAxis, m_fRotationSpeed * fElapsedTime);
 	if (m_fMovingSpeed != 0.0f)

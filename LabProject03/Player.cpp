@@ -38,14 +38,13 @@ void CPlayer::Move(const DWORD dwDirection, float fDistance)
 		if (dwDirection & DIR_DOWN)
 			XMStoreFloat3(&xmf3Shift, XMVectorAdd(XMLoadFloat3(&xmf3Shift),	XMVectorScale(XMLoadFloat3(&m_xmf3Up), -fDistance)));
 		
-		//이걸로 총알 방향 찾기
 		Move(xmf3Shift, true);
 	}
 }
 
 void CPlayer::Move(const XMFLOAT3& xmf3Shift, bool bUpdateVelocity)
 {
-	//원워치
+	//플레이어 원워치
 	if (m_xmf3Position.x > 30.0f || m_xmf3Position.x < -30.0f) {
 		m_xmf3Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
 	}
