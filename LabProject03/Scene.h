@@ -9,10 +9,9 @@ class CScene
 public:
 	CScene(CPlayer* pPlayer) { m_pPlayer = pPlayer; }
 	virtual ~CScene() { }
-private:
-	//int nInvisibleBullets = 0;
 
 public:
+	int mObjectCount = 200;
 	int m_nObjects = 0;
 	CGameObject** m_ppObjects = NULL;
 	CPlayer* m_pPlayer = NULL;
