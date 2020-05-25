@@ -13,7 +13,7 @@ public:
 	CMesh* m_pMesh = NULL;
 	//À§Ä¡_41,_42,_43
 	XMFLOAT4X4 m_xmf4x4World = Matrix4x4::Identity();
-
+	
 	DWORD m_dwColor = RGB(255, 0, 0);
 
 	XMFLOAT3 m_xmf3MovingDirection = XMFLOAT3(0.0f, 0.0f, 1.0f);
@@ -25,9 +25,13 @@ public:
 	//
 	bool bBulletcheck = false;
 	bool bShootcheck = false;
+	bool bCrushCheck = false;
 	XMFLOAT3 m_xmf3BulletLook = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	XMFLOAT3 m_xmf3BulletRight = XMFLOAT3(1.0f, 0.0f, 0.0f);
 	XMFLOAT3 m_xmf3BulletUp = XMFLOAT3(0.0f, 1.0f, 0.0f);
+	BoundingBox b_bAABB;
+	BoundingOrientedBox b_boOOBB;
+	//BoundingBox::CreateFromPoints(b_bAABB)
 	//XMFLOAT3 m_xmf3Look = XMFLOAT3(0.0f, 0.0f, 1.0f);
 
 public:
@@ -59,6 +63,8 @@ public:
 	virtual void Render(HDC hDCFrameBuffer, CCamera* pCamera);
 	//
 	void BulletMove();
+	void SetBoundingBox(float fWidth, float fHeight, float fDepth);
+	//void checkOOBB(CGameObject& box1);
 
 	//void LookAt(const CPlayer& pPlayer, XMFLOAT3& xmf3LookAt, XMFLOAT3& xmf3Up);
 	//void OnUpdateTransform();

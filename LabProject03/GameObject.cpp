@@ -35,7 +35,44 @@ void CGameObject::BulletMove()
 	XMStoreFloat3(&xmf3Shift, XMVectorAdd(XMLoadFloat3(&xmf3Shift), XMVectorScale(XMLoadFloat3(&m_xmf3BulletLook), 1.5f)));
 	XMStoreFloat3(&m_xmf3Position, XMVectorAdd(XMLoadFloat3(&m_xmf3Position), XMLoadFloat3(&xmf3Shift)));
 	SetPosition(m_xmf3Position);
+	//
+	SetBoundingBox(0.8f, 0.8f, 0.8f);
 }
+
+void CGameObject::SetBoundingBox(float fWidth, float fHeight, float fDepth)
+{
+	XMVECTOR min = XMVectorSet(-fWidth / 2.0f, -fHeight / 2.0f, -fDepth / 2.0f, 1.0f);
+	XMVECTOR max = XMVectorSet(+fWidth / 2.0f, +fHeight / 2.0f, +fDepth / 2.0f, 1.0f);
+	BoundingBox::CreateFromPoints(b_bAABB, min, max);
+	XMVECTOR point = XMVectorSet(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43, 1.0f);
+	//b_bAABB.Contains(point);
+	ContainmentType result = b_bAABB.Contains(point);
+	BoundingOrientedBox::CreateFromBoundingBox(b_boOOBB, b_bAABB);
+}
+
+//void CGameObject::checkOOBB(CGameObject& box)
+//{
+//	bool check = false;
+//	if (bBulletcheck == true) {
+//		check = b_boOOBB.Intersects(box.b_boOOBB);
+//		if (check == true) {
+//			SetPosition(0.0f, -100000.0f, 0.0f);
+//			SetRotationAxis(XMFLOAT3(0.0f, 0.0f, 0.0f));
+//			SetRotationSpeed(0.0f);
+//			SetMovingDirection(XMFLOAT3(0.0f, 0.0f, 0.0f));
+//			SetMovingSpeed(0.0f);
+//			bShootcheck = false;
+//
+//			box.SetPosition(0.0f, 100000.0f, 0.0f);
+//			box.SetRotationAxis(XMFLOAT3(0.0f, 0.0f, 0.0f));
+//			box.SetRotationSpeed(0.0f);
+//			box.SetMovingDirection(XMFLOAT3(0.0f, 0.0f, 0.0f));
+//			box.SetMovingSpeed(0.0f);
+//			return;
+//		}
+//	}
+//}
+
 
 //
 
@@ -96,6 +133,8 @@ void CGameObject::Move(XMFLOAT3& vDirection, float fSpeed)
 			SetMovingDirection(XMFLOAT3(0.0f, 0.0f, 0.0f));
 			SetMovingSpeed(0.0f);
 			bShootcheck = false;
+			//
+			SetBoundingBox(0.8f, 0.8f, 0.8f);
 		}
 	}
 }

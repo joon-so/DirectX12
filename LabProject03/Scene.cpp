@@ -19,6 +19,8 @@ void CScene::BuildObjects(CPlayer& pPlayer)
 	m_ppObjects[0]->SetRotationSpeed(90.0f);
 	m_ppObjects[0]->SetMovingDirection(XMFLOAT3(1.0f, 0.0f, 0.0f));
 	m_ppObjects[0]->SetMovingSpeed(4.0f);
+	//
+	m_ppObjects[0]->SetBoundingBox(4.0f, 4.0f, 4.0f);
 
 	m_ppObjects[1] = new CGameObject();
 	m_ppObjects[1]->SetMesh(pCubeMesh);
@@ -28,6 +30,8 @@ void CScene::BuildObjects(CPlayer& pPlayer)
 	m_ppObjects[1]->SetRotationSpeed(180.0f);
 	m_ppObjects[1]->SetMovingDirection(XMFLOAT3(-1.0f, 0.0f, 0.0f));
 	m_ppObjects[1]->SetMovingSpeed(1.5f);
+	//
+	m_ppObjects[1]->SetBoundingBox(4.0f, 4.0f, 4.0f);
 
 	m_ppObjects[2] = new CGameObject();
 	m_ppObjects[2]->SetMesh(pCubeMesh);
@@ -37,6 +41,8 @@ void CScene::BuildObjects(CPlayer& pPlayer)
 	m_ppObjects[2]->SetRotationSpeed(30.15f);
 	m_ppObjects[2]->SetMovingDirection(XMFLOAT3(1.0f, -1.0f, 0.0f));
 	m_ppObjects[2]->SetMovingSpeed(2.0f);
+	//
+	m_ppObjects[2]->SetBoundingBox(4.0f, 4.0f, 4.0f);
 
 	m_ppObjects[3] = new CGameObject();
 	m_ppObjects[3]->SetMesh(pCubeMesh);
@@ -46,6 +52,8 @@ void CScene::BuildObjects(CPlayer& pPlayer)
 	m_ppObjects[3]->SetRotationSpeed(40.6f);
 	m_ppObjects[3]->SetMovingDirection(XMFLOAT3(1.0f, 1.0f, 0.0f));
 	m_ppObjects[3]->SetMovingSpeed(2.0f);
+	//
+	m_ppObjects[3]->SetBoundingBox(4.0f, 4.0f, 4.0f);
 
 	m_ppObjects[4] = new CGameObject();
 	m_ppObjects[4]->SetMesh(pCubeMesh);
@@ -55,6 +63,8 @@ void CScene::BuildObjects(CPlayer& pPlayer)
 	m_ppObjects[4]->SetRotationSpeed(50.06f);
 	m_ppObjects[4]->SetMovingDirection(XMFLOAT3(-1.0f, 1.0f, 0.0f));
 	m_ppObjects[4]->SetMovingSpeed(1.5f);
+	//
+	m_ppObjects[4]->SetBoundingBox(4.0f, 4.0f, 4.0f);
 
 	for (int i = 5; i < m_nObjects; i++) {
 		m_ppObjects[i] = new CGameObject();
@@ -95,6 +105,38 @@ void CScene::BuildBullet(CPlayer& pPlayer, int iChooseBullet)
 	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf3BulletUp = pPlayer.m_xmf3Up;
 	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf3BulletRight = pPlayer.m_xmf3Right;
 	m_ppObjects[m_nObjects + iChooseBullet]->bShootcheck = true;
+	//
+	m_ppObjects[m_nObjects + iChooseBullet]->SetBoundingBox(0.8f, 0.8f, 0.8f);
+}
+
+void CScene::checkOOBB()
+{
+	bool check = false;
+	for (int i = 25; i < mObjectCount; i++) {
+		if (m_ppObjects[i]->bBulletcheck == true && m_ppObjects[i]->bShootcheck == true) {
+			for (int j = 0; j < 5; j++) {
+				check = m_ppObjects[i]->b_boOOBB.Intersects(m_ppObjects[j]->b_boOOBB);
+				if (check == true) {
+					m_ppObjects[i]->SetPosition(0.0f, -10000.0f, 0.0f);
+					m_ppObjects[i]->SetRotationAxis(XMFLOAT3(0.0f, 0.0f, 0.0f));
+					m_ppObjects[i]->SetRotationSpeed(0.0f);
+					m_ppObjects[i]->SetMovingDirection(XMFLOAT3(0.0f, 0.0f, 0.0f));
+					m_ppObjects[i]->SetMovingSpeed(0.0f);
+					m_ppObjects[i]->SetBoundingBox(0.8f, 0.8f, 0.8f);
+					m_ppObjects[i]->bShootcheck = false;
+
+					m_ppObjects[j]->SetPosition(10000.0f, 10000.0f, 10000.0f);
+					m_ppObjects[j]->SetRotationAxis(XMFLOAT3(0.0f, 0.0f, 0.0f));
+					m_ppObjects[j]->SetRotationSpeed(0.0f);
+					m_ppObjects[j]->SetMovingDirection(XMFLOAT3(0.0f, 0.0f, 0.0f));
+					m_ppObjects[j]->SetBoundingBox(4.0f, 4.0f, 4.0f);
+					m_ppObjects[j]->SetMovingSpeed(0.0f);
+					return;
+				}
+					
+			}
+		}
+	}
 }
 
 
@@ -109,6 +151,7 @@ void CScene::ReleaseObjects()
 
 void CScene::Animate(float fElapsedTime)
 {
+	checkOOBB();
 	for (int i = 0; i < mObjectCount; i++)
 		m_ppObjects[i]->Animate(fElapsedTime);
 }
