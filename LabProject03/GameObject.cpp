@@ -45,8 +45,7 @@ void CGameObject::SetBoundingBox(float fWidth, float fHeight, float fDepth)
 	XMVECTOR max = XMVectorSet(+fWidth / 2.0f, +fHeight / 2.0f, +fDepth / 2.0f, 1.0f);
 	BoundingBox::CreateFromPoints(b_bAABB, min, max);
 	XMVECTOR point = XMVectorSet(m_xmf4x4World._41, m_xmf4x4World._42, m_xmf4x4World._43, 1.0f);
-	//b_bAABB.Contains(point);
-	ContainmentType result = b_bAABB.Contains(point);
+	b_bAABB.Contains(point);
 	BoundingOrientedBox::CreateFromBoundingBox(b_boOOBB, b_bAABB);
 }
 

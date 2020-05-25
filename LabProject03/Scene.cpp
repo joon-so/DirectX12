@@ -151,7 +151,7 @@ void CScene::ReleaseObjects()
 
 void CScene::Animate(float fElapsedTime)
 {
-	checkOOBB();
+	//checkOOBB();
 	for (int i = 0; i < mObjectCount; i++)
 		m_ppObjects[i]->Animate(fElapsedTime);
 }
