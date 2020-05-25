@@ -14,22 +14,22 @@ void CScene::BuildObjects(CPlayer& pPlayer)
 	m_ppObjects[0] = new CGameObject();
 	m_ppObjects[0]->SetMesh(pCubeMesh);
 	m_ppObjects[0]->SetColor(RGB(255, 0, 0));
-	m_ppObjects[0]->SetPosition(-13.5f, 25.0f, +90.0f);
+	m_ppObjects[0]->SetPosition(-13.5f, 10.0f, +90.0f);
 	m_ppObjects[0]->SetRotationAxis(XMFLOAT3(1.0f, 1.0f, 0.0f));
 	m_ppObjects[0]->SetRotationSpeed(90.0f);
 	m_ppObjects[0]->SetMovingDirection(XMFLOAT3(1.0f, 0.0f, 0.0f));
-	m_ppObjects[0]->SetMovingSpeed(4.0f);
+	m_ppObjects[0]->SetMovingSpeed(2.0f);
 	//
 	m_ppObjects[0]->SetBoundingBox(4.0f, 4.0f, 4.0f);
 
 	m_ppObjects[1] = new CGameObject();
 	m_ppObjects[1]->SetMesh(pCubeMesh);
 	m_ppObjects[1]->SetColor(RGB(0, 0, 255));
-	m_ppObjects[1]->SetPosition(+13.5f, -20.0f, +100.0f);
+	m_ppObjects[1]->SetPosition(+13.5f, -15.0f, +100.0f);
 	m_ppObjects[1]->SetRotationAxis(XMFLOAT3(0.0f, 1.0f, 1.0f));
 	m_ppObjects[1]->SetRotationSpeed(180.0f);
 	m_ppObjects[1]->SetMovingDirection(XMFLOAT3(-1.0f, 0.0f, 0.0f));
-	m_ppObjects[1]->SetMovingSpeed(1.5f);
+	m_ppObjects[1]->SetMovingSpeed(1.0f);
 	//
 	m_ppObjects[1]->SetBoundingBox(4.0f, 4.0f, 4.0f);
 
@@ -40,7 +40,7 @@ void CScene::BuildObjects(CPlayer& pPlayer)
 	m_ppObjects[2]->SetRotationAxis(XMFLOAT3(1.0f, 0.0f, 1.0f));
 	m_ppObjects[2]->SetRotationSpeed(30.15f);
 	m_ppObjects[2]->SetMovingDirection(XMFLOAT3(1.0f, -1.0f, 0.0f));
-	m_ppObjects[2]->SetMovingSpeed(2.0f);
+	m_ppObjects[2]->SetMovingSpeed(1.0f);
 	//
 	m_ppObjects[2]->SetBoundingBox(4.0f, 4.0f, 4.0f);
 
@@ -51,18 +51,18 @@ void CScene::BuildObjects(CPlayer& pPlayer)
 	m_ppObjects[3]->SetRotationAxis(XMFLOAT3(0.0f, 0.0f, 1.0f));
 	m_ppObjects[3]->SetRotationSpeed(40.6f);
 	m_ppObjects[3]->SetMovingDirection(XMFLOAT3(1.0f, 1.0f, 0.0f));
-	m_ppObjects[3]->SetMovingSpeed(2.0f);
+	m_ppObjects[3]->SetMovingSpeed(1.5f);
 	//
 	m_ppObjects[3]->SetBoundingBox(4.0f, 4.0f, 4.0f);
 
 	m_ppObjects[4] = new CGameObject();
 	m_ppObjects[4]->SetMesh(pCubeMesh);
 	m_ppObjects[4]->SetColor(RGB(128, 0, 255));
-	m_ppObjects[4]->SetPosition(10.0f, 10.0f, 90.0f);
+	m_ppObjects[4]->SetPosition(5.0f, 5.0f, 90.0f);
 	m_ppObjects[4]->SetRotationAxis(XMFLOAT3(0.0f, 1.0f, 1.0f));
 	m_ppObjects[4]->SetRotationSpeed(50.06f);
 	m_ppObjects[4]->SetMovingDirection(XMFLOAT3(-1.0f, 1.0f, 0.0f));
-	m_ppObjects[4]->SetMovingSpeed(1.5f);
+	m_ppObjects[4]->SetMovingSpeed(1.0f);
 	//
 	m_ppObjects[4]->SetBoundingBox(4.0f, 4.0f, 4.0f);
 
