@@ -54,7 +54,7 @@ bool CScene::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wPar
 
 bool CScene::ProcessInput(UCHAR* pKeysBuffer)
 {
-	//return(false);
+	return(false);
 }
 
 void CScene::AnimateObjects(float fTimeElapsed)
