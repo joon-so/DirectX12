@@ -76,6 +76,7 @@ void CCamera::GenerateProjectionMatrix(float fNearPlaneDistance, float fFarPlane
 	//	m_xmf4x4Projection = Matrix4x4::PerspectiveFovLH(XMConvertToRadians(fFOVAngle), fAspectRatio, fNearPlaneDistance, fFarPlaneDistance);
 	XMMATRIX xmmtxProjection = XMMatrixPerspectiveFovLH(XMConvertToRadians(fFOVAngle), fAspectRatio, fNearPlaneDistance, fFarPlaneDistance);
 	XMStoreFloat4x4(&m_xmf4x4Projection, xmmtxProjection);
+	
 
 #ifdef _WITH_DIERECTX_MATH_FRUSTUM
 	BoundingFrustum::CreateFromMatrix(m_xmFrustumView, xmmtxProjection);
@@ -241,11 +242,11 @@ void CCamera::CreateShaderVariables(ID3D12Device *pd3dDevice, ID3D12GraphicsComm
 void CCamera::UpdateShaderVariables(ID3D12GraphicsCommandList *pd3dCommandList)
 {
 	XMFLOAT4X4 xmf4x4View;
-	XMStoreFloat4x4(&xmf4x4View, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4View)));
+	xmf4x4View = Matrix4x4::Transpose(m_xmf4x4View);
 	pd3dCommandList->SetGraphicsRoot32BitConstants(2, 16, &xmf4x4View, 0);
 
 	XMFLOAT4X4 xmf4x4Projection;
-	XMStoreFloat4x4(&xmf4x4Projection, XMMatrixTranspose(XMLoadFloat4x4(&m_xmf4x4Projection)));
+	xmf4x4Projection = Matrix4x4::Transpose(m_xmf4x4Projection);
 	pd3dCommandList->SetGraphicsRoot32BitConstants(2, 16, &xmf4x4Projection, 16);
 
 	pd3dCommandList->SetGraphicsRoot32BitConstants(2, 3, &m_xmf3Position, 32);

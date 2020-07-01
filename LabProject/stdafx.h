@@ -261,7 +261,3 @@ namespace Plane
 		return(xmf4Result);
 	}
 }
-//
-//random_device rd;
-//mt19937 mersenne(rd());
-//uniform_int_distribution<> die;
