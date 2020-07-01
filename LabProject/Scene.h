@@ -5,12 +5,19 @@
 #pragma once
 
 #include "Shader.h"
+#include "Player.h"
 
 class CScene
 {
 public:
     CScene();
     ~CScene();
+
+	int mBulletCount = 200;
+	int m_nObjects = 0;
+	int m_nBullets = 0;
+
+	virtual void BuildBullet(CPlayer& PlayerPosition, int iChooseBullet);
 
 	bool OnProcessingMouseMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
 	bool OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPARAM wParam, LPARAM lParam);
@@ -33,6 +40,6 @@ protected:
 	ID3D12RootSignature			*m_pd3dGraphicsRootSignature = NULL;
 
 	CGameObject					**m_ppObjects = 0;
-	int							m_nObjects = 0;
+	//int							m_nObjects = 0;
 	int							m_nEnemyObjects = 10;
 };

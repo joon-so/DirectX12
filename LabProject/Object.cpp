@@ -39,6 +39,19 @@ void CGameObject::SetShader(CShader *pShader)
 
 void CGameObject::Animate(float fTimeElapsed)
 {
+	if (bShootcheck == true)
+		BulletMove();
+}
+
+void CGameObject::BulletMove()
+{
+	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
+	XMFLOAT3 m_xmf3Position{ m_xmf4x4World._41, m_xmf4x4World._42 ,m_xmf4x4World._43 };
+	xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3BulletLook, fBulletSpeed);
+	m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
+	SetPosition(m_xmf3Position);
+	//
+	//SetBoundingBox(0.8f, 0.8f, 0.8f);
 }
 
 void CGameObject::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)

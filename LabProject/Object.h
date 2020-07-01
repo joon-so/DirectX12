@@ -20,6 +20,12 @@ public:
 	int iMoveDirection;
 	float fEnemySpeed;
 	int iDirectionChange = 500;
+	float fBulletSpeed = 0.5f;
+	bool bBulletcheck = false;
+	bool bShootcheck = false;
+	XMFLOAT3 m_xmf3BulletLook = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	XMFLOAT3 m_xmf3BulletRight = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	XMFLOAT3 m_xmf3BulletUp = XMFLOAT3(0.0f, 1.0f, 0.0f);
 
 	XMFLOAT4X4						m_xmf4x4World;
 	CMesh							*m_pMesh = NULL;
@@ -56,6 +62,8 @@ public:
 	void MoveUp(float fDistance = 1.0f);
 	void MoveForward(float fDistance = 1.0f);
 	void MoveRandom();
+	void BulletMove();
+
 
 	void Rotate(float fPitch = 10.0f, float fYaw = 10.0f, float fRoll = 10.0f);
 	void Rotate(XMFLOAT3 *pxmf3Axis, float fAngle);

@@ -343,28 +343,38 @@ void CGameFramework::OnProcessingKeyboardMessage(HWND hWnd, UINT nMessageID, WPA
 {
 	switch (nMessageID)
 	{
-        case WM_KEYUP:
-			switch (wParam) 
-            {
-				case VK_ESCAPE:
-					::PostQuitMessage(0);
-                    break;
-                case VK_RETURN:
-                    break;
-				case VK_F1:
-				case VK_F2:
-				case VK_F3:
-					m_pCamera = m_pPlayer->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
-					break;
-				case VK_F9:
-					ChangeSwapChainState();
-					break;
-				default:
-					break;
-			} 
+	case WM_KEYDOWN:
+		switch (wParam)
+		{
+		case VK_ESCAPE:
+			::PostQuitMessage(0);
+			break;
+		case VK_RETURN:
+			break;
+		case VK_CONTROL:
+			//ÃÑ¾Ë ¹ß»ç
+			if (m_pScene->m_nBullets < m_pScene->mBulletCount) {
+				m_pScene->BuildBullet(*m_pPlayer, m_pScene->m_nBullets);
+				m_pScene->m_nBullets++;
+			}
+			else {
+				m_pScene->m_nBullets = 0;
+			}
+			break;
+		case VK_F1:
+		case VK_F2:
+		case VK_F3:
+			m_pCamera = m_pPlayer->ChangeCamera((DWORD)(wParam - VK_F1 + 1), m_GameTimer.GetTimeElapsed());
+			break;
+		case VK_F9:
+			ChangeSwapChainState();
 			break;
 		default:
 			break;
+		}
+		break;
+	default:
+		break;
 	}
 }
 
@@ -577,7 +587,7 @@ void CGameFramework::FrameAdvance()
 	D3D12_CPU_DESCRIPTOR_HANDLE d3dRtvCPUDescriptorHandle = m_pd3dRtvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	d3dRtvCPUDescriptorHandle.ptr += (m_nSwapChainBufferIndex * m_nRtvDescriptorIncrementSize);
 
-	float pfClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f };
+	float pfClearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	m_pd3dCommandList->ClearRenderTargetView(d3dRtvCPUDescriptorHandle, pfClearColor/*Colors::Azure*/, 0, NULL);
 
 	D3D12_CPU_DESCRIPTOR_HANDLE d3dDsvCPUDescriptorHandle = m_pd3dDsvDescriptorHeap->GetCPUDescriptorHandleForHeapStart();

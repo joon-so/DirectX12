@@ -33,8 +33,8 @@ void CScene::LoadSceneObjectsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCo
 	nReads = (UINT)::fread(pstrToken, sizeof(char), 14, pFile); //"<GameObjects>:"
 	nReads = (UINT)::fread(&m_nObjects, sizeof(int), 1, pFile);
 
-	m_nObjects += (m_nEnemyObjects + 1);
-	m_ppObjects = new CGameObject*[m_nObjects];
+	m_nObjects += m_nEnemyObjects;
+	m_ppObjects = new CGameObject*[m_nObjects + mBulletCount];
 
 	CGameObject *pGameObject = NULL;
 	for (int i = 0; i < m_nObjects; i++)
@@ -147,23 +147,15 @@ void CScene::LoadSceneObjectsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCo
 	m_ppObjects[m_nObjects - 2]->SetColor(XMFLOAT3(0.25f, 0.75f, 0.65f));
 
 	//Cube
-
-	//CCubeMeshDiffused* pCubeMesh = new CCubeMeshDiffused(pd3dDevice, pd3dCommandList,
-	//	50.0f, 50.0f, 50.0f);
-	//CCubeRotatingObject* pRotatingObject = new CCubeRotatingObject();
-	//pRotatingObject->SetMesh(pCubeMesh);
-	//pRotatingObject->SetShader(pShader);
-
-	//m_ppObjects[m_nObjects - 1] = pRotatingObject;
-	//m_ppObjects[m_nObjects - 1]->SetPosition(0.0f, 40.0f, 20.0f);
-	//m_ppObjects[m_nObjects - 1]->SetColor(XMFLOAT3(0.7f, 0.0f, 0.0f));
-
 	CMesh* pCubeMesh = new CMesh(pd3dDevice, pd3dCommandList, "Models/Cube.txt");
-	m_ppObjects[m_nObjects - 1] = new CGameObject();
-	m_ppObjects[m_nObjects - 1]->SetMesh(pCubeMesh);
-	m_ppObjects[m_nObjects - 1]->SetShader(pShader);
-	m_ppObjects[m_nObjects - 1]->SetPosition(0.0f, 40.0f, 13.0f);
-	m_ppObjects[m_nObjects - 1]->SetColor(XMFLOAT3(0.7f, 0.0f, 0.0f));
+
+	for (int i = m_nObjects - 1; i < m_nObjects + mBulletCount; i++) {
+		m_ppObjects[i] = new CGameObject();
+		m_ppObjects[i]->bBulletcheck = true;
+		m_ppObjects[i]->SetMesh(pCubeMesh);
+		m_ppObjects[i]->SetColor(XMFLOAT3(1.0f, 0.0f, 0.0f));
+		m_ppObjects[i]->SetPosition(0.0f, -10.0f, 0.0f);
+	}
 }
 
 void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
@@ -171,6 +163,19 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 
 	LoadSceneObjectsFromFile(pd3dDevice, pd3dCommandList, (char *)"Models/Scene.bin");
+}
+
+void CScene::BuildBullet(CPlayer& pPlayer, int iChooseBullet)
+{
+	m_ppObjects[m_nObjects + iChooseBullet]->SetPosition(pPlayer.GetPosition());
+	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf4x4World = pPlayer.m_xmf4x4World;		//플레이어의 벡터 복사 -> 날아가는 방향 조절
+	
+	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf3BulletLook = pPlayer.GetLookVector();
+	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf3BulletUp = pPlayer.GetUpVector();
+	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf3BulletRight = pPlayer.GetRightVector();
+	m_ppObjects[m_nObjects + iChooseBullet]->bShootcheck = true;
+	////
+	//m_ppObjects[m_nObjects + iChooseBullet]->SetBoundingBox(0.8f, 0.8f, 0.8f);
 }
 
 ID3D12RootSignature *CScene::CreateGraphicsRootSignature(ID3D12Device *pd3dDevice)
@@ -251,13 +256,17 @@ bool CScene::ProcessInput()
 
 void CScene::AnimateObjects(float fTimeElapsed)
 {
-	for (int j = 0; j < m_nObjects; j++)
-	{
-		m_ppObjects[j]->Animate(fTimeElapsed);
-	}
-	for (int j = m_nObjects - m_nEnemyObjects - 2; j < m_nObjects - 1 ; j++)
+	//for (int j = 0; j < m_nObjects; j++)
+	//{
+	//	m_ppObjects[j]->Animate(fTimeElapsed);
+	//}
+	for (int j = m_nObjects - m_nEnemyObjects - 1; j < m_nObjects - 1; j++)
 	{
 		if (m_ppObjects[j]) m_ppObjects[j]->MoveRandom();
+	}
+	for (int i = m_nObjects - 1; i < m_nObjects + mBulletCount; i++)
+	{
+		m_ppObjects[i]->Animate(fTimeElapsed);
 	}
 }
 
@@ -267,7 +276,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 	pCamera->UpdateShaderVariables(pd3dCommandList);
 
-	for (int j = 0; j < m_nObjects; j++)
+	for (int j = 0; j < m_nObjects + mBulletCount; j++)
 	{
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pd3dCommandList, pCamera);
 	}
