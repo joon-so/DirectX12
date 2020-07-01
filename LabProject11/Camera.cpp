@@ -272,7 +272,7 @@ CThirdPersonCamera::CThirdPersonCamera(CCamera* pCamera) : CCamera(pCamera)
 		것을 의미한다. 즉, 3인칭 카메라의 로컬 x-축 벡터와 로컬 z-축 벡터는 xz-평면에 평행하다.*/
 		if (pCamera->GetMode() == SPACESHIP_CAMERA)
 		{
-			m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 0.0f);
+			m_xmf3Up = XMFLOAT3(0.0f, 1.0f, 1.0f);
 			m_xmf3Right.y = 0.0f;
 			m_xmf3Look.y = 0.0f;
 			m_xmf3Right = Vector3::Normalize(m_xmf3Right);
