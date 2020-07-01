@@ -68,3 +68,21 @@ public:
 	virtual ~CUfoObject();
 };
 
+class CCubeRotatingObject : public CGameObject
+{
+public:
+	CCubeRotatingObject();
+	virtual ~CCubeRotatingObject();
+
+private:
+	XMFLOAT3 m_xmf3RotationAxis;
+	float m_fRotationSpeed;
+
+public:
+	void SetRotationSpeed(float fRotationSpeed) { m_fRotationSpeed = fRotationSpeed; }
+	void SetRotationAxis(XMFLOAT3 xmf3RotationAxis) {
+		m_xmf3RotationAxis = xmf3RotationAxis;
+	}
+
+	virtual void Animate(float fTimeElapsed);
+};

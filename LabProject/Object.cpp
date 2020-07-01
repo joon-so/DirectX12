@@ -208,3 +208,17 @@ CUfoObject::~CUfoObject()
 }
 
 
+CCubeRotatingObject::CCubeRotatingObject()
+{
+	m_xmf3RotationAxis = XMFLOAT3(0.0f, 1.0f, 0.0f);
+	m_fRotationSpeed = 90.0f;
+}
+
+void CCubeRotatingObject::Animate(float fTimeElapsed)
+{
+	CGameObject::Rotate(&m_xmf3RotationAxis, m_fRotationSpeed * fTimeElapsed);
+}
+
+CCubeRotatingObject::~CCubeRotatingObject()
+{
+}
