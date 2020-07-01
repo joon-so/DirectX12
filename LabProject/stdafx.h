@@ -16,10 +16,12 @@
 #include <tchar.h>
 #include <math.h>
 
+#include <time.h>
+
 #include <string>
 #include <wrl.h>
 #include <shellapi.h>
-
+#include <random>
 #include <fstream>
 #include <vector>
 using namespace std;
@@ -52,6 +54,13 @@ using Microsoft::WRL::ComPtr;
 #define DIR_DOWN				0x20
 
 #define _WITH_DIERECTX_MATH_FRUSTUM
+
+#define TOP 65.0f
+#define BOTTOM 15.0f
+#define LEFT -100.0f
+#define RIGHT 100.0f
+#define FORWARD 200.0f
+#define BACK -200.0f
 
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "d3d12.lib")
@@ -252,3 +261,7 @@ namespace Plane
 		return(xmf4Result);
 	}
 }
+//
+//random_device rd;
+//mt19937 mersenne(rd());
+//uniform_int_distribution<> die;

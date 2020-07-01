@@ -34,4 +34,5 @@ protected:
 
 	CGameObject					**m_ppObjects = 0;
 	int							m_nObjects = 0;
+	int							m_nEnemyObjects = 10;
 };

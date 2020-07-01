@@ -17,6 +17,9 @@ public:
 
 public:
 	char							m_pstrName[64] = { '\0' };
+	int iMoveDirection;
+	float fEnemySpeed;
+	int iDirectionChange = 500;
 
 	XMFLOAT4X4						m_xmf4x4World;
 	CMesh							*m_pMesh = NULL;
@@ -52,6 +55,7 @@ public:
 	void MoveStrafe(float fDistance = 1.0f);
 	void MoveUp(float fDistance = 1.0f);
 	void MoveForward(float fDistance = 1.0f);
+	void MoveRandom();
 
 	void Rotate(float fPitch = 10.0f, float fYaw = 10.0f, float fRoll = 10.0f);
 	void Rotate(XMFLOAT3 *pxmf3Axis, float fAngle);

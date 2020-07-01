@@ -8,7 +8,13 @@
 
 CGameObject::CGameObject()
 {
+	random_device rd;
+	mt19937 mersenne(rd());
+	uniform_int_distribution<> die;
+
 	m_xmf4x4World = Matrix4x4::Identity();
+	iMoveDirection = die(mersenne) % 6;
+	fEnemySpeed = (die(mersenne) % 6 + 1) / (float)70;
 }
 
 CGameObject::~CGameObject()
@@ -102,26 +108,79 @@ XMFLOAT3 CGameObject::GetRight()
 
 void CGameObject::MoveStrafe(float fDistance)
 {
-	XMFLOAT3 xmf3Position = GetPosition();
-	XMFLOAT3 xmf3Right = GetRight();
-	xmf3Position = Vector3::Add(xmf3Position, xmf3Right, fDistance);
-	CGameObject::SetPosition(xmf3Position);
+	if (GetPosition().x > LEFT&& GetPosition().x < RIGHT) {
+		XMFLOAT3 xmf3Position = GetPosition();
+		XMFLOAT3 xmf3Right = GetRight();
+		xmf3Position = Vector3::Add(xmf3Position, xmf3Right, fDistance);
+		CGameObject::SetPosition(xmf3Position);
+	}
 }
 
 void CGameObject::MoveUp(float fDistance)
 {
-	XMFLOAT3 xmf3Position = GetPosition();
-	XMFLOAT3 xmf3Up = GetUp();
-	xmf3Position = Vector3::Add(xmf3Position, xmf3Up, fDistance);
-	CGameObject::SetPosition(xmf3Position);
+	if (GetPosition().y > BOTTOM&& GetPosition().y < TOP) {
+		XMFLOAT3 xmf3Position = GetPosition();
+		XMFLOAT3 xmf3Up = GetUp();
+		xmf3Position = Vector3::Add(xmf3Position, xmf3Up, fDistance);
+		CGameObject::SetPosition(xmf3Position);
+	}
 }
 
 void CGameObject::MoveForward(float fDistance)
 {
-	XMFLOAT3 xmf3Position = GetPosition();
-	XMFLOAT3 xmf3Look = GetLook();
-	xmf3Position = Vector3::Add(xmf3Position, xmf3Look, fDistance);
-	CGameObject::SetPosition(xmf3Position);
+	if (GetPosition().z > BACK&& GetPosition().z < FORWARD) {
+		XMFLOAT3 xmf3Position = GetPosition();
+		XMFLOAT3 xmf3Look = GetLook();
+		xmf3Position = Vector3::Add(xmf3Position, xmf3Look, fDistance);
+		CGameObject::SetPosition(xmf3Position);
+	}
+}
+
+void CGameObject::MoveRandom()
+{
+	iDirectionChange--;
+	int range = 3.0f;
+	// top = 65.0f, bottom = 15.0f, left = -100.0f, right = 100.0f, forward = 200.0f, back = -200.0f
+	// 0 : left ,  1 : right , 2: down , 3: up , 4: back , 5: forward
+	if (GetPosition().x < LEFT + range || GetPosition().x > RIGHT - range ||
+		GetPosition().y <BOTTOM + range || GetPosition().y > TOP - range ||
+		GetPosition().z < BACK + range || GetPosition().z > FORWARD - range||
+		iDirectionChange == 0) 
+	{
+		random_device rd;
+		mt19937 mersenne(rd());
+		uniform_int_distribution<> die;
+
+		if (iDirectionChange == 0)
+			iDirectionChange = 500;
+		else if (iMoveDirection == 0)
+			MoveStrafe(fEnemySpeed);
+		else if (iMoveDirection == 1)
+			MoveStrafe(-fEnemySpeed);
+		else if (iMoveDirection == 2)
+			MoveUp(-fEnemySpeed);
+		else if (iMoveDirection == 3)
+			MoveUp(+fEnemySpeed);
+		else if (iMoveDirection == 4)
+			MoveForward(+fEnemySpeed);
+		else if (iMoveDirection == 5)
+			MoveForward(-fEnemySpeed);
+
+		iMoveDirection = die(rd) % 6;
+	}
+
+	if (iMoveDirection == 0)
+		MoveStrafe(-fEnemySpeed);
+	else if (iMoveDirection == 1)
+		MoveStrafe(+fEnemySpeed);
+	else if (iMoveDirection == 2)
+		MoveUp(+fEnemySpeed);
+	else if (iMoveDirection == 3)
+		MoveUp(-fEnemySpeed);
+	else if (iMoveDirection == 4)
+		MoveForward(-fEnemySpeed);
+	else if (iMoveDirection == 5)
+		MoveForward(+fEnemySpeed);
 }
 
 void CGameObject::Rotate(float fPitch, float fYaw, float fRoll)

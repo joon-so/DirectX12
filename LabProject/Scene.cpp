@@ -33,7 +33,7 @@ void CScene::LoadSceneObjectsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCo
 	nReads = (UINT)::fread(pstrToken, sizeof(char), 14, pFile); //"<GameObjects>:"
 	nReads = (UINT)::fread(&m_nObjects, sizeof(int), 1, pFile);
 
-	m_ppObjects = new CGameObject*[m_nObjects + 5];
+	m_ppObjects = new CGameObject*[m_nObjects + m_nEnemyObjects];
 
 	CGameObject *pGameObject = NULL;
 	for (int i = 0; i < m_nObjects; i++)
@@ -82,33 +82,69 @@ void CScene::LoadSceneObjectsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCo
 	m_ppObjects[m_nObjects] = new CGameObject();
 	m_ppObjects[m_nObjects]->SetMesh(pUfoMesh);
 	m_ppObjects[m_nObjects]->SetShader(pShader);
-	m_ppObjects[m_nObjects]->SetPosition(6.0f, 20.0f, 13.0f);
+	m_ppObjects[m_nObjects]->SetPosition(6.0f, 30.0f, 13.0f);
 	m_ppObjects[m_nObjects]->SetColor(XMFLOAT3(0.7f, 0.0f, 0.0f));
+	//m_ppObjects[m_nObjects]->MoveForward(1.0f);
 
 	m_ppObjects[m_nObjects + 1] = new CGameObject();
 	m_ppObjects[m_nObjects + 1]->SetMesh(pUfoMesh);
 	m_ppObjects[m_nObjects + 1]->SetShader(pShader);
-	m_ppObjects[m_nObjects + 1]->SetPosition(10.0f, 22.0f, 8.0f);
+	m_ppObjects[m_nObjects + 1]->SetPosition(10.0f, 60.0f, 8.0f);
 	m_ppObjects[m_nObjects + 1]->SetColor(XMFLOAT3(0.0f, 0.7f, 0.0f));
 
 	m_ppObjects[m_nObjects + 2] = new CGameObject();
 	m_ppObjects[m_nObjects + 2]->SetMesh(pUfoMesh);
 	m_ppObjects[m_nObjects + 2]->SetShader(pShader);
-	m_ppObjects[m_nObjects + 2]->SetPosition(-5.0f, 18.0f, 11.0f);
+	m_ppObjects[m_nObjects + 2]->SetPosition(-95.0f, 55.0f, 11.0f);
 	m_ppObjects[m_nObjects + 2]->SetColor(XMFLOAT3(0.0f, 0.0f, 0.7f));
 
 	m_ppObjects[m_nObjects + 3] = new CGameObject();
 	m_ppObjects[m_nObjects + 3]->SetMesh(pUfoMesh);
 	m_ppObjects[m_nObjects + 3]->SetShader(pShader);
-	m_ppObjects[m_nObjects + 3]->SetPosition(-10.0f, 26.0f, 8.0f);
+	m_ppObjects[m_nObjects + 3]->SetPosition(90.0f, 50.0f, 8.0f);
 	m_ppObjects[m_nObjects + 3]->SetColor(XMFLOAT3(0.0f, 0.7f, 0.7f));
 
 	m_ppObjects[m_nObjects + 4] = new CGameObject();
-	m_ppObjects[m_nObjects + 4]->SetMesh(pFlyerMesh);
+	m_ppObjects[m_nObjects + 4]->SetMesh(pUfoMesh);
 	m_ppObjects[m_nObjects + 4]->SetShader(pShader);
-	m_ppObjects[m_nObjects + 4]->SetPosition(0.0f, 31.0f, 20.0f);
+	m_ppObjects[m_nObjects + 4]->SetPosition(0.0f, 20.0f, 190.0f);
 	m_ppObjects[m_nObjects + 4]->Rotate(0.0f, 180.0f, 0.0f);
 	m_ppObjects[m_nObjects + 4]->SetColor(XMFLOAT3(0.25f, 0.75f, 0.65f));
+
+	m_ppObjects[m_nObjects + 5] = new CGameObject();
+	m_ppObjects[m_nObjects + 5]->SetMesh(pUfoMesh);
+	m_ppObjects[m_nObjects + 5]->SetShader(pShader);
+	m_ppObjects[m_nObjects + 5]->SetPosition(-10.0f, 20.0f, -180.0f);
+	m_ppObjects[m_nObjects + 5]->Rotate(0.0f, 180.0f, 0.0f);
+	m_ppObjects[m_nObjects + 5]->SetColor(XMFLOAT3(0.25f, 0.75f, 0.65f));
+
+	m_ppObjects[m_nObjects + 6] = new CGameObject();
+	m_ppObjects[m_nObjects + 6]->SetMesh(pUfoMesh);
+	m_ppObjects[m_nObjects + 6]->SetShader(pShader);
+	m_ppObjects[m_nObjects + 6]->SetPosition(10.0f, 31.0f, 20.0f);
+	m_ppObjects[m_nObjects + 6]->Rotate(0.0f, 180.0f, 0.0f);
+	m_ppObjects[m_nObjects + 6]->SetColor(XMFLOAT3(0.25f, 0.75f, 0.65f));
+
+	m_ppObjects[m_nObjects + 7] = new CGameObject();
+	m_ppObjects[m_nObjects + 7]->SetMesh(pUfoMesh);
+	m_ppObjects[m_nObjects + 7]->SetShader(pShader);
+	m_ppObjects[m_nObjects + 7]->SetPosition(-20.0f, 31.0f, 20.0f);
+	m_ppObjects[m_nObjects + 7]->Rotate(0.0f, 180.0f, 0.0f);
+	m_ppObjects[m_nObjects + 7]->SetColor(XMFLOAT3(0.25f, 0.75f, 0.65f));
+
+	m_ppObjects[m_nObjects + 8] = new CGameObject();
+	m_ppObjects[m_nObjects + 8]->SetMesh(pUfoMesh);
+	m_ppObjects[m_nObjects + 8]->SetShader(pShader);
+	m_ppObjects[m_nObjects + 8]->SetPosition(20.0f, 31.0f, 20.0f);
+	m_ppObjects[m_nObjects + 8]->Rotate(0.0f, 180.0f, 0.0f);
+	m_ppObjects[m_nObjects + 8]->SetColor(XMFLOAT3(0.25f, 0.75f, 0.65f));
+
+	m_ppObjects[m_nObjects + 9] = new CGameObject();
+	m_ppObjects[m_nObjects + 9]->SetMesh(pUfoMesh);
+	m_ppObjects[m_nObjects + 9]->SetShader(pShader);
+	m_ppObjects[m_nObjects + 9]->SetPosition(-25.0f, 31.0f, 20.0f);
+	m_ppObjects[m_nObjects + 9]->Rotate(0.0f, 180.0f, 0.0f);
+	m_ppObjects[m_nObjects + 9]->SetColor(XMFLOAT3(0.25f, 0.75f, 0.65f));
 }
 
 void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
@@ -200,6 +236,10 @@ void CScene::AnimateObjects(float fTimeElapsed)
 	{
 		m_ppObjects[j]->Animate(fTimeElapsed);
 	}
+	for (int j = m_nObjects; j < m_nObjects + m_nEnemyObjects; j++)
+	{
+		if (m_ppObjects[j]) m_ppObjects[j]->MoveRandom();
+	}
 }
 
 void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera)
@@ -208,7 +248,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 	pCamera->UpdateShaderVariables(pd3dCommandList);
 
-	for (int j = 0; j < m_nObjects + 5; j++)
+	for (int j = 0; j < m_nObjects + m_nEnemyObjects; j++)
 	{
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pd3dCommandList, pCamera);
 	}
