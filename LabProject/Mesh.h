@@ -59,4 +59,7 @@ public:
 	virtual void Render(ID3D12GraphicsCommandList *pd3dCommandList);
 
 	void LoadMeshFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList, const char *pstrFileName);
+
+	void LoadtextMeshFromFile(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList, const char* pstrFileName);
+
 };

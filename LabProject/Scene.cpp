@@ -33,7 +33,7 @@ void CScene::LoadSceneObjectsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCo
 	nReads = (UINT)::fread(pstrToken, sizeof(char), 14, pFile); //"<GameObjects>:"
 	nReads = (UINT)::fread(&m_nObjects, sizeof(int), 1, pFile);
 
-	m_ppObjects = new CGameObject*[m_nObjects];
+	m_ppObjects = new CGameObject*[m_nObjects + 5];
 
 	CGameObject *pGameObject = NULL;
 	for (int i = 0; i < m_nObjects; i++)
@@ -75,6 +75,40 @@ void CScene::LoadSceneObjectsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCo
 	}
 
 	::fclose(pFile);
+
+	CMesh* pUfoMesh = new CMesh(pd3dDevice, pd3dCommandList, "Models/UFO.txt");
+	CMesh* pFlyerMesh = new CMesh(pd3dDevice, pd3dCommandList, "Models/FlyerPlayership.txt");
+
+	m_ppObjects[m_nObjects] = new CGameObject();
+	m_ppObjects[m_nObjects]->SetMesh(pUfoMesh);
+	m_ppObjects[m_nObjects]->SetShader(pShader);
+	m_ppObjects[m_nObjects]->SetPosition(6.0f, 20.0f, 13.0f);
+	m_ppObjects[m_nObjects]->SetColor(XMFLOAT3(0.7f, 0.0f, 0.0f));
+
+	m_ppObjects[m_nObjects + 1] = new CGameObject();
+	m_ppObjects[m_nObjects + 1]->SetMesh(pUfoMesh);
+	m_ppObjects[m_nObjects + 1]->SetShader(pShader);
+	m_ppObjects[m_nObjects + 1]->SetPosition(10.0f, 22.0f, 8.0f);
+	m_ppObjects[m_nObjects + 1]->SetColor(XMFLOAT3(0.0f, 0.7f, 0.0f));
+
+	m_ppObjects[m_nObjects + 2] = new CGameObject();
+	m_ppObjects[m_nObjects + 2]->SetMesh(pUfoMesh);
+	m_ppObjects[m_nObjects + 2]->SetShader(pShader);
+	m_ppObjects[m_nObjects + 2]->SetPosition(-5.0f, 18.0f, 11.0f);
+	m_ppObjects[m_nObjects + 2]->SetColor(XMFLOAT3(0.0f, 0.0f, 0.7f));
+
+	m_ppObjects[m_nObjects + 3] = new CGameObject();
+	m_ppObjects[m_nObjects + 3]->SetMesh(pUfoMesh);
+	m_ppObjects[m_nObjects + 3]->SetShader(pShader);
+	m_ppObjects[m_nObjects + 3]->SetPosition(-10.0f, 26.0f, 8.0f);
+	m_ppObjects[m_nObjects + 3]->SetColor(XMFLOAT3(0.0f, 0.7f, 0.7f));
+
+	m_ppObjects[m_nObjects + 4] = new CGameObject();
+	m_ppObjects[m_nObjects + 4]->SetMesh(pFlyerMesh);
+	m_ppObjects[m_nObjects + 4]->SetShader(pShader);
+	m_ppObjects[m_nObjects + 4]->SetPosition(0.0f, 31.0f, 20.0f);
+	m_ppObjects[m_nObjects + 4]->Rotate(0.0f, 180.0f, 0.0f);
+	m_ppObjects[m_nObjects + 4]->SetColor(XMFLOAT3(0.25f, 0.75f, 0.65f));
 }
 
 void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *pd3dCommandList)
@@ -174,7 +208,7 @@ void CScene::Render(ID3D12GraphicsCommandList *pd3dCommandList, CCamera *pCamera
 	pd3dCommandList->SetGraphicsRootSignature(m_pd3dGraphicsRootSignature);
 	pCamera->UpdateShaderVariables(pd3dCommandList);
 
-	for (int j = 0; j < m_nObjects; j++)
+	for (int j = 0; j < m_nObjects + 5; j++)
 	{
 		if (m_ppObjects[j]) m_ppObjects[j]->Render(pd3dCommandList, pCamera);
 	}
