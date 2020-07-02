@@ -41,6 +41,8 @@ void CGameObject::Animate(float fTimeElapsed)
 {
 	if (bShootcheck == true)
 		BulletMove();
+	if (bParticlecheck == true)
+		Particle();
 }
 
 
@@ -215,6 +217,101 @@ void CGameObject::BulletMove()
 	}
 	//
 	//SetBoundingBox(0.8f, 0.8f, 0.8f);
+}
+
+void CGameObject::Particle()
+{
+	if (fSplashTime > 0) {
+		float degacson = sqrt(fSplashSpeed * fSplashSpeed + fSplashSpeed * fSplashSpeed);
+		if (iParticleNum == 0) {
+			MoveForward(fSplashSpeed);
+		}
+		else if (iParticleNum == 1) {
+			MoveForward(-fSplashSpeed);
+		}
+		else if (iParticleNum == 2) {
+			MoveUp(fSplashSpeed);
+		}
+		else if (iParticleNum == 3) {
+			MoveUp(-fSplashSpeed);
+		}
+		else if (iParticleNum == 4) {
+			MoveStrafe(fSplashSpeed);
+		}
+		else if (iParticleNum == 5) {
+			MoveStrafe(-fSplashSpeed);
+		}
+		else if (iParticleNum == 6) {
+			MoveForward(degacson);
+			MoveUp(degacson);
+		}
+		else if (iParticleNum == 7) {
+			MoveForward(degacson);
+			MoveUp(-degacson);
+		}
+		else if (iParticleNum == 8) {
+			MoveForward(degacson);
+			MoveStrafe(degacson);
+		}
+		else if (iParticleNum == 9) {
+			MoveForward(degacson);
+			MoveStrafe(-degacson);
+		}
+		else if (iParticleNum == 10) {
+			MoveUp(degacson);
+			MoveStrafe(degacson);
+		}
+		else if (iParticleNum == 11) {
+			MoveUp(degacson);
+			MoveStrafe(-degacson);
+		}
+		else if (iParticleNum == 12) {
+			MoveForward(-degacson);
+			MoveUp(degacson);
+		}
+		else if (iParticleNum == 13) {
+			MoveForward(-degacson);
+			MoveUp(-degacson);
+		}
+		else if (iParticleNum == 14) {
+			MoveForward(-degacson);
+			MoveStrafe(degacson);
+		}
+		else if (iParticleNum == 15) {
+			MoveForward(-degacson);
+			MoveStrafe(-degacson);
+		}
+		else if (iParticleNum == 16) {
+			MoveUp(-degacson);
+			MoveStrafe(degacson);
+		}
+		else if (iParticleNum == 17) {
+			MoveUp(-degacson);
+			MoveStrafe(-degacson);
+		}
+		else if (iParticleNum == 18) {
+			MoveForward(fSplashSpeed * 2);
+		}
+		else if (iParticleNum == 19) {
+			MoveForward(-fSplashSpeed * 2);
+		}
+		else if (iParticleNum == 20) {
+			MoveUp(fSplashSpeed * 2);
+		}
+		else if (iParticleNum == 21) {
+			MoveUp(-fSplashSpeed * 2);
+		}
+		else if (iParticleNum == 22) {
+			MoveStrafe(fSplashSpeed * 2);
+		}
+		else if (iParticleNum == 23) {
+			MoveStrafe(-fSplashSpeed * 2);
+		}
+		fSplashTime--;
+	}
+	else {
+		SetPosition(0.0f, -1000000.0f, 0.0f);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -23,6 +23,10 @@ public:
 	float fBulletSpeed = 0.5f;
 	bool bBulletcheck = false;
 	bool bShootcheck = false;
+	bool bParticlecheck = false;
+	int iParticleNum = 0;
+	float fSplashTime = 0;
+	float fSplashSpeed = 0.008f;
 	XMFLOAT3 m_xmf3BulletLook = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	XMFLOAT3 m_xmf3BulletRight = XMFLOAT3(1.0f, 0.0f, 0.0f);
 	XMFLOAT3 m_xmf3BulletUp = XMFLOAT3(0.0f, 1.0f, 0.0f);
@@ -64,6 +68,7 @@ public:
 	void MoveForward(float fDistance = 1.0f);
 	void MoveRandom();
 	void BulletMove();
+	void Particle();
 
 
 	void Rotate(float fPitch = 10.0f, float fYaw = 10.0f, float fRoll = 10.0f);
