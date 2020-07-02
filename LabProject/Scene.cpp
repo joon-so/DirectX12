@@ -154,7 +154,7 @@ void CScene::LoadSceneObjectsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCo
 		m_ppObjects[i]->bBulletcheck = true;
 		m_ppObjects[i]->SetMesh(pCubeMesh);
 		m_ppObjects[i]->SetColor(XMFLOAT3(1.0f, 0.0f, 0.0f));
-		m_ppObjects[i]->SetPosition(0.0f, -10.0f, 0.0f);
+		m_ppObjects[i]->SetPosition(0.0f, -1000000.0f, 0.0f);
 	}
 }
 
@@ -262,11 +262,32 @@ void CScene::AnimateObjects(float fTimeElapsed)
 	//}
 	for (int j = m_nObjects - m_nEnemyObjects - 1; j < m_nObjects - 1; j++)
 	{
-		if (m_ppObjects[j]) m_ppObjects[j]->MoveRandom();
+		if (m_ppObjects[j]) {
+			m_ppObjects[j]->MoveRandom();
+			m_ppObjects[j]->aabb = BoundingBox(m_ppObjects[j]->GetPosition(), XMFLOAT3(3.0f, 2.0f, 3.0f));
+		}
+		
 	}
 	for (int i = m_nObjects - 1; i < m_nObjects + mBulletCount; i++)
 	{
 		m_ppObjects[i]->Animate(fTimeElapsed);
+		m_ppObjects[i]->aabb = BoundingBox(m_ppObjects[i]->GetPosition(), XMFLOAT3(1.0f, 1.0f, 1.0f));
+	}
+	
+	for (int i = m_nObjects - 1; i < m_nObjects + mBulletCount; i++) {
+		if (m_ppObjects[i]->bShootcheck == true) {
+			for (int j = m_nObjects - m_nEnemyObjects - 1; j < m_nObjects - 1; j++) {
+				if (m_ppObjects[i]->aabb.Intersects(m_ppObjects[j]->aabb)) {
+					//ÃÑ¾Ë ¼Ò¸ê
+					m_ppObjects[i]->SetPosition(0.0f, -1000000.0f, 0.0f);
+					m_ppObjects[i]->bShootcheck = false;
+
+					//Àû ¼Ò¸ê
+					m_ppObjects[j]->SetPosition(0.0f, 1000000.0f, 0.0f);
+					break;
+				}
+			}
+		}
 	}
 }
 

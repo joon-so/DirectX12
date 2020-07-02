@@ -26,6 +26,7 @@ public:
 	XMFLOAT3 m_xmf3BulletLook = XMFLOAT3(0.0f, 0.0f, 1.0f);
 	XMFLOAT3 m_xmf3BulletRight = XMFLOAT3(1.0f, 0.0f, 0.0f);
 	XMFLOAT3 m_xmf3BulletUp = XMFLOAT3(0.0f, 1.0f, 0.0f);
+	BoundingBox aabb;
 
 	XMFLOAT4X4						m_xmf4x4World;
 	CMesh							*m_pMesh = NULL;
@@ -74,23 +75,4 @@ class CUfoObject : public CGameObject
 public:
 	CUfoObject();
 	virtual ~CUfoObject();
-};
-
-class CCubeRotatingObject : public CGameObject
-{
-public:
-	CCubeRotatingObject();
-	virtual ~CCubeRotatingObject();
-
-private:
-	XMFLOAT3 m_xmf3RotationAxis;
-	float m_fRotationSpeed;
-
-public:
-	void SetRotationSpeed(float fRotationSpeed) { m_fRotationSpeed = fRotationSpeed; }
-	void SetRotationAxis(XMFLOAT3 xmf3RotationAxis) {
-		m_xmf3RotationAxis = xmf3RotationAxis;
-	}
-
-	virtual void Animate(float fTimeElapsed);
 };

@@ -43,16 +43,6 @@ void CGameObject::Animate(float fTimeElapsed)
 		BulletMove();
 }
 
-void CGameObject::BulletMove()
-{
-	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
-	XMFLOAT3 m_xmf3Position{ m_xmf4x4World._41, m_xmf4x4World._42 ,m_xmf4x4World._43 };
-	xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3BulletLook, fBulletSpeed);
-	m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
-	SetPosition(m_xmf3Position);
-	//
-	//SetBoundingBox(0.8f, 0.8f, 0.8f);
-}
 
 void CGameObject::CreateShaderVariables(ID3D12Device* pd3dDevice, ID3D12GraphicsCommandList* pd3dCommandList)
 {
@@ -208,6 +198,25 @@ void CGameObject::Rotate(XMFLOAT3 *pxmf3Axis, float fAngle)
 	m_xmf4x4World = Matrix4x4::Multiply(mtxRotate, m_xmf4x4World);
 }
 
+void CGameObject::BulletMove()
+{
+	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
+	XMFLOAT3 m_xmf3Position{ m_xmf4x4World._41, m_xmf4x4World._42 ,m_xmf4x4World._43 };
+	xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3BulletLook, fBulletSpeed);
+	m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
+	SetPosition(m_xmf3Position);
+
+	if (GetPosition().x < LEFT || GetPosition().x > RIGHT ||
+		GetPosition().y < 0 || GetPosition().y > 100 ||
+		GetPosition().z < BACK || GetPosition().z > FORWARD)
+	{
+		SetPosition(0.0f, -1000000.0f, 0.0f);
+		bShootcheck = false;
+	}
+	//
+	//SetBoundingBox(0.8f, 0.8f, 0.8f);
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 CUfoObject::CUfoObject()
@@ -218,20 +227,4 @@ CUfoObject::CUfoObject()
 CUfoObject::~CUfoObject()
 {
 
-}
-
-
-CCubeRotatingObject::CCubeRotatingObject()
-{
-	m_xmf3RotationAxis = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	m_fRotationSpeed = 90.0f;
-}
-
-void CCubeRotatingObject::Animate(float fTimeElapsed)
-{
-	CGameObject::Rotate(&m_xmf3RotationAxis, m_fRotationSpeed * fTimeElapsed);
-}
-
-CCubeRotatingObject::~CCubeRotatingObject()
-{
 }
