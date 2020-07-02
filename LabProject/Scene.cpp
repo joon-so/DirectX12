@@ -263,10 +263,16 @@ bool CScene::ProcessInput()
 
 void CScene::AnimateObjects(float fTimeElapsed)
 {
-	//for (int j = 0; j < m_nObjects; j++)
-	//{
-	//	m_ppObjects[j]->Animate(fTimeElapsed);
-	//}
+	for (int j = m_nObjects - m_nEnemyObjects - 1; j < m_nObjects; j++)
+	{
+		m_ppObjects[j]->Animate(fTimeElapsed);
+		//if (m_ppObjects[j]->fEnemyRestart < 0) {
+		//	m_ppObjects[j]->SetPosition(XMFLOAT3((float)(rand() % 50 + 40), (float)(rand() % 20 + 20), (float)(rand() % 120 + 50)));
+		//}
+		//else if(m_ppObjects[j]->fEnemyRestart > 0){
+		//	m_ppObjects[j]->fEnemyRestart--;
+		//}
+	}
 	for (int j = m_nObjects - m_nEnemyObjects - 1; j < m_nObjects - 1; j++)
 	{
 		if (m_ppObjects[j]) {
@@ -302,6 +308,7 @@ void CScene::AnimateObjects(float fTimeElapsed)
 
 					//Àû ¼Ò¸ê
 					m_ppObjects[j]->SetPosition(0.0f, 1000000.0f, 0.0f);
+					m_ppObjects[j]->fEnemyRestart = 1000;
 
 					break;
 				}

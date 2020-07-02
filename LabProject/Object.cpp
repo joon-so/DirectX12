@@ -43,6 +43,14 @@ void CGameObject::Animate(float fTimeElapsed)
 		BulletMove();
 	if (bParticlecheck == true)
 		Particle();
+
+	if (fEnemyRestart == 0) {
+		SetPosition(XMFLOAT3((float)(rand() % 50 + 40), (float)(rand() % 20 + 20), (float)(rand() % 120 + 50)));
+		fEnemyRestart = -1;
+	}
+	else if (fEnemyRestart > 0) {
+		fEnemyRestart--;
+	}
 }
 
 
@@ -208,9 +216,9 @@ void CGameObject::BulletMove()
 	m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
 	SetPosition(m_xmf3Position);
 
-	if (GetPosition().x < LEFT || GetPosition().x > RIGHT ||
+	if (GetPosition().x < LEFT - 100.0f || GetPosition().x > RIGHT + 100.0f ||
 		GetPosition().y < 0 || GetPosition().y > 100 ||
-		GetPosition().z < BACK || GetPosition().z > FORWARD)
+		GetPosition().z < BACK - 100.0f || GetPosition().z > FORWARD + 100.0f)
 	{
 		SetPosition(0.0f, -1000000.0f, 0.0f);
 		bShootcheck = false;

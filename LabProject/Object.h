@@ -19,7 +19,8 @@ public:
 	char							m_pstrName[64] = { '\0' };
 	int iMoveDirection;
 	float fEnemySpeed;
-	int iDirectionChange = 500;
+	float fEnemyRestart = -1;
+	int iDirectionChange = 0;
 	float fBulletSpeed = 0.5f;
 	bool bBulletcheck = false;
 	bool bShootcheck = false;
