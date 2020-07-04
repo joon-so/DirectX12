@@ -146,28 +146,3 @@ float4 PSPseudoLighting(VS_OUTPUT input) : SV_TARGET
 
 	return(cColor);
 }
-
-/*
-float4 PSPseudoLighting(VS_OUTPUT input) : SV_TARGET
-{
-	float4 cColor = float4(0.0f, 0.0f, 0.0f, 1.0f);
-
-	float3 f3Normal = normalize(input.normalW);
-
-	float fDiffused = max(0.0f, dot(f3Normal, gf3LightDirection));
-	cColor.rgb = gf3ObjectColor * gf3LightColor * fDiffused;
-
-	float3 f3ToCamera = normalize(gf3CameraPosition - input.positionW);
-	float3 f3Half = normalize(gf3LightDirection + f3ToCamera);
-	float fHalf = max(0.0f, dot(f3Normal, f3Half));
-	float fSpecular = pow(fHalf, gfSpecular * 128.0f) * gfGlossiness;
-	cColor.rgb += gf3SpecularColor * fSpecular;
-
-	cColor.rgb += saturate(float3(0.25f * abs(input.uv.r), 0.25f * abs(input.uv.g), 0.25f)) * 0.5f;
-
-	float fRim = saturate(dot(f3ToCamera, f3Normal));
-	cColor.rgb += float3(0.25f, 0.0f, 0.0f) * pow(fRim, 4.0f);
-
-	return(cColor);
-}
-*/

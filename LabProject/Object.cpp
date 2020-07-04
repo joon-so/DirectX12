@@ -1,7 +1,3 @@
-//-----------------------------------------------------------------------------
-// File: CGameObject.cpp
-//-----------------------------------------------------------------------------
-
 #include "stdafx.h"
 #include "Object.h"
 #include "Shader.h"
@@ -14,7 +10,7 @@ CGameObject::CGameObject()
 
 	m_xmf4x4World = Matrix4x4::Identity();
 	iMoveDirection = die(mersenne) % 6;
-	fEnemySpeed = (die(mersenne) % 6 + 1) / (float)70;
+	fEnemySpeed = (float)(die(mersenne) % 50 + 20);
 }
 
 CGameObject::~CGameObject()
@@ -40,16 +36,17 @@ void CGameObject::SetShader(CShader *pShader)
 void CGameObject::Animate(float fTimeElapsed)
 {
 	if (bShootcheck == true)
-		BulletMove();
+		BulletMove(fTimeElapsed);
 	if (bParticlecheck == true)
-		Particle();
+		Particle(fTimeElapsed);
 
-	if (fEnemyRestart == 0) {
-		SetPosition(XMFLOAT3((float)(rand() % 50 + 40), (float)(rand() % 20 + 20), (float)(rand() % 120 + 50)));
+	//재생성
+	if (fEnemyRestart <= 0 && fEnemyRestart > -1) {
+		SetPosition(XMFLOAT3(float(rand() % 180 - 90.0f), float(rand() % 40 + 18.0f), float(rand() % 350 - 200.0f)));
 		fEnemyRestart = -1;
 	}
 	else if (fEnemyRestart > 0) {
-		fEnemyRestart--;
+		fEnemyRestart -= fTimeElapsed;
 	}
 }
 
@@ -149,51 +146,47 @@ void CGameObject::MoveForward(float fDistance)
 	}
 }
 
-void CGameObject::MoveRandom()
+void CGameObject::MoveRandom(float fTimeElapsed)
 {
-	iDirectionChange--;
+	iDirectionChange -= fTimeElapsed;
 	int range = 3.0f;
 	// top = 65.0f, bottom = 15.0f, left = -100.0f, right = 100.0f, forward = 200.0f, back = -200.0f
 	// 0 : left ,  1 : right , 2: down , 3: up , 4: back , 5: forward
 	if (GetPosition().x < LEFT + range || GetPosition().x > RIGHT - range ||
 		GetPosition().y <BOTTOM + range || GetPosition().y > TOP - range ||
 		GetPosition().z < BACK + range || GetPosition().z > FORWARD - range||
-		iDirectionChange == 0) 
+		iDirectionChange < 0) 
 	{
-		random_device rd;
-		mt19937 mersenne(rd());
-		uniform_int_distribution<> die;
-
-		if (iDirectionChange == 0)
-			iDirectionChange = 500;
+		if (iDirectionChange < 0)
+			iDirectionChange = rand() % 2 + 0.4f;
 		else if (iMoveDirection == 0)
-			MoveStrafe(fEnemySpeed);
+			MoveStrafe(fEnemySpeed * fTimeElapsed);
 		else if (iMoveDirection == 1)
-			MoveStrafe(-fEnemySpeed);
+			MoveStrafe(-fEnemySpeed * fTimeElapsed);
 		else if (iMoveDirection == 2)
-			MoveUp(-fEnemySpeed);
+			MoveUp(-fEnemySpeed * fTimeElapsed);
 		else if (iMoveDirection == 3)
-			MoveUp(+fEnemySpeed);
+			MoveUp(+fEnemySpeed * fTimeElapsed);
 		else if (iMoveDirection == 4)
-			MoveForward(+fEnemySpeed);
+			MoveForward(+fEnemySpeed * fTimeElapsed);
 		else if (iMoveDirection == 5)
-			MoveForward(-fEnemySpeed);
+			MoveForward(-fEnemySpeed * fTimeElapsed);
 
-		iMoveDirection = die(rd) % 6;
+		iMoveDirection = rand() % 6;
 	}
 
 	if (iMoveDirection == 0)
-		MoveStrafe(-fEnemySpeed);
+		MoveStrafe(-fEnemySpeed * fTimeElapsed);
 	else if (iMoveDirection == 1)
-		MoveStrafe(+fEnemySpeed);
+		MoveStrafe(+fEnemySpeed * fTimeElapsed);
 	else if (iMoveDirection == 2)
-		MoveUp(+fEnemySpeed);
+		MoveUp(+fEnemySpeed * fTimeElapsed);
 	else if (iMoveDirection == 3)
-		MoveUp(-fEnemySpeed);
+		MoveUp(-fEnemySpeed * fTimeElapsed);
 	else if (iMoveDirection == 4)
-		MoveForward(-fEnemySpeed);
+		MoveForward(-fEnemySpeed * fTimeElapsed);
 	else if (iMoveDirection == 5)
-		MoveForward(+fEnemySpeed);
+		MoveForward(+fEnemySpeed * fTimeElapsed);
 }
 
 void CGameObject::Rotate(float fPitch, float fYaw, float fRoll)
@@ -208,14 +201,15 @@ void CGameObject::Rotate(XMFLOAT3 *pxmf3Axis, float fAngle)
 	m_xmf4x4World = Matrix4x4::Multiply(mtxRotate, m_xmf4x4World);
 }
 
-void CGameObject::BulletMove()
+void CGameObject::BulletMove(float fTimeElapsed)
 {
 	XMFLOAT3 xmf3Shift = XMFLOAT3(0, 0, 0);
 	XMFLOAT3 m_xmf3Position{ m_xmf4x4World._41, m_xmf4x4World._42 ,m_xmf4x4World._43 };
-	xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3BulletLook, fBulletSpeed);
+	xmf3Shift = Vector3::Add(xmf3Shift, m_xmf3BulletLook, fBulletSpeed * fTimeElapsed);
 	m_xmf3Position = Vector3::Add(m_xmf3Position, xmf3Shift);
 	SetPosition(m_xmf3Position);
 
+	//범위 넘어갈시 총알 삭제
 	if (GetPosition().x < LEFT - 100.0f || GetPosition().x > RIGHT + 100.0f ||
 		GetPosition().y < 0 || GetPosition().y > 100 ||
 		GetPosition().z < BACK - 100.0f || GetPosition().z > FORWARD + 100.0f)
@@ -223,31 +217,29 @@ void CGameObject::BulletMove()
 		SetPosition(0.0f, -1000000.0f, 0.0f);
 		bShootcheck = false;
 	}
-	//
-	//SetBoundingBox(0.8f, 0.8f, 0.8f);
 }
 
-void CGameObject::Particle()
+void CGameObject::Particle(float fTimeElapsed)
 {
 	if (fSplashTime > 0) {
-		float degacson = sqrt(fSplashSpeed * fSplashSpeed + fSplashSpeed * fSplashSpeed);
+		float degacson = fTimeElapsed * sqrt(fSplashSpeed * fSplashSpeed + fSplashSpeed * fSplashSpeed);
 		if (iParticleNum == 0) {
-			MoveForward(fSplashSpeed);
+			MoveForward(fSplashSpeed * fTimeElapsed);
 		}
 		else if (iParticleNum == 1) {
-			MoveForward(-fSplashSpeed);
+			MoveForward(-fSplashSpeed * fTimeElapsed);
 		}
 		else if (iParticleNum == 2) {
-			MoveUp(fSplashSpeed);
+			MoveUp(fSplashSpeed * fTimeElapsed);
 		}
 		else if (iParticleNum == 3) {
-			MoveUp(-fSplashSpeed);
+			MoveUp(-fSplashSpeed * fTimeElapsed);
 		}
 		else if (iParticleNum == 4) {
-			MoveStrafe(fSplashSpeed);
+			MoveStrafe(fSplashSpeed * fTimeElapsed);
 		}
 		else if (iParticleNum == 5) {
-			MoveStrafe(-fSplashSpeed);
+			MoveStrafe(-fSplashSpeed * fTimeElapsed);
 		}
 		else if (iParticleNum == 6) {
 			MoveForward(degacson);
@@ -298,38 +290,26 @@ void CGameObject::Particle()
 			MoveStrafe(-degacson);
 		}
 		else if (iParticleNum == 18) {
-			MoveForward(fSplashSpeed * 2);
+			MoveForward(fSplashSpeed * 2 * fTimeElapsed);
 		}
 		else if (iParticleNum == 19) {
-			MoveForward(-fSplashSpeed * 2);
+			MoveForward(-fSplashSpeed * 2 * fTimeElapsed);
 		}
 		else if (iParticleNum == 20) {
-			MoveUp(fSplashSpeed * 2);
+			MoveUp(fSplashSpeed * 2 * fTimeElapsed);
 		}
 		else if (iParticleNum == 21) {
-			MoveUp(-fSplashSpeed * 2);
+			MoveUp(-fSplashSpeed * 2 * fTimeElapsed);
 		}
 		else if (iParticleNum == 22) {
-			MoveStrafe(fSplashSpeed * 2);
+			MoveStrafe(fSplashSpeed * 2 * fTimeElapsed);
 		}
 		else if (iParticleNum == 23) {
-			MoveStrafe(-fSplashSpeed * 2);
+			MoveStrafe(-fSplashSpeed * 2 * fTimeElapsed);
 		}
-		fSplashTime--;
+		fSplashTime -= fTimeElapsed;
 	}
 	else {
 		SetPosition(0.0f, -1000000.0f, 0.0f);
 	}
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-CUfoObject::CUfoObject()
-{
-
-}
-
-CUfoObject::~CUfoObject()
-{
-
 }

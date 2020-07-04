@@ -1,7 +1,3 @@
-//-----------------------------------------------------------------------------
-// File: CScene.cpp
-//-----------------------------------------------------------------------------
-
 #include "stdafx.h"
 #include "Scene.h"
 
@@ -30,12 +26,13 @@ void CScene::LoadSceneObjectsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCo
 	BYTE nStrLength = 0;
 
 	nReads = (UINT)::fread(&nStrLength, sizeof(BYTE), 1, pFile);
-	nReads = (UINT)::fread(pstrToken, sizeof(char), 14, pFile); //"<GameObjects>:"
+	nReads = (UINT)::fread(pstrToken, sizeof(char), 14, pFile);
 	nReads = (UINT)::fread(&m_nObjects, sizeof(int), 1, pFile);
 
 	m_nObjects += m_nEnemyObjects;
 	m_ppObjects = new CGameObject*[m_nObjects + mBulletCount + iParticleCube];
 
+	//map
 	CGameObject *pGameObject = NULL;
 	for (int i = 0; i < m_nObjects; i++)
 	{
@@ -77,78 +74,18 @@ void CScene::LoadSceneObjectsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCo
 
 	::fclose(pFile);
 
+	//Enemy
 	CMesh* pUfoMesh = new CMesh(pd3dDevice, pd3dCommandList, "Models/UFO.txt");
-	CMesh* pFlyerMesh = new CMesh(pd3dDevice, pd3dCommandList, "Models/FlyerPlayership.txt");
+	for (int i = m_nObjects - m_nEnemyObjects - 1; i < m_nObjects; i++) {
+		m_ppObjects[i] = new CGameObject();
+		m_ppObjects[i]->SetMesh(pUfoMesh);
+		m_ppObjects[i]->SetShader(pShader);
+		m_ppObjects[i]->SetPosition(float(rand()%180 - 90.0f), float(rand() % 40 + 18.0f), float(rand() % 350 - 200.0f));
+		m_ppObjects[i]->SetColor(XMFLOAT3(rand() / float(RAND_MAX), rand() / float(RAND_MAX), rand() / float(RAND_MAX)));
+	}
 
-	m_ppObjects[m_nObjects - 11] = new CGameObject();
-	m_ppObjects[m_nObjects - 11]->SetMesh(pUfoMesh);
-	m_ppObjects[m_nObjects - 11]->SetShader(pShader);
-	m_ppObjects[m_nObjects - 11]->SetPosition(6.0f, 30.0f, 13.0f);
-	m_ppObjects[m_nObjects - 11]->SetColor(XMFLOAT3(0.7f, 0.0f, 0.0f));
-
-	m_ppObjects[m_nObjects - 10] = new CGameObject();
-	m_ppObjects[m_nObjects - 10]->SetMesh(pUfoMesh);
-	m_ppObjects[m_nObjects - 10]->SetShader(pShader);
-	m_ppObjects[m_nObjects - 10]->SetPosition(10.0f, 60.0f, 8.0f);
-	m_ppObjects[m_nObjects - 10]->SetColor(XMFLOAT3(0.0f, 0.7f, 0.0f));
-
-	m_ppObjects[m_nObjects - 9] = new CGameObject();
-	m_ppObjects[m_nObjects - 9]->SetMesh(pUfoMesh);
-	m_ppObjects[m_nObjects - 9]->SetShader(pShader);
-	m_ppObjects[m_nObjects - 9]->SetPosition(-95.0f, 55.0f, 11.0f);
-	m_ppObjects[m_nObjects - 9]->SetColor(XMFLOAT3(0.0f, 0.0f, 0.7f));
-
-	m_ppObjects[m_nObjects - 8] = new CGameObject();
-	m_ppObjects[m_nObjects - 8]->SetMesh(pUfoMesh);
-	m_ppObjects[m_nObjects - 8]->SetShader(pShader);
-	m_ppObjects[m_nObjects - 8]->SetPosition(90.0f, 50.0f, 8.0f);
-	m_ppObjects[m_nObjects - 8]->SetColor(XMFLOAT3(0.0f, 0.7f, 0.7f));
-
-	m_ppObjects[m_nObjects - 7] = new CGameObject();
-	m_ppObjects[m_nObjects - 7]->SetMesh(pUfoMesh);
-	m_ppObjects[m_nObjects - 7]->SetShader(pShader);
-	m_ppObjects[m_nObjects - 7]->SetPosition(0.0f, 20.0f, 190.0f);
-	m_ppObjects[m_nObjects - 7]->Rotate(0.0f, 180.0f, 0.0f);
-	m_ppObjects[m_nObjects - 7]->SetColor(XMFLOAT3(0.25f, 0.75f, 0.65f));
-
-	m_ppObjects[m_nObjects - 6] = new CGameObject();
-	m_ppObjects[m_nObjects - 6]->SetMesh(pUfoMesh);
-	m_ppObjects[m_nObjects - 6]->SetShader(pShader);
-	m_ppObjects[m_nObjects - 6]->SetPosition(-10.0f, 20.0f, -180.0f);
-	m_ppObjects[m_nObjects - 6]->Rotate(0.0f, 180.0f, 0.0f);
-	m_ppObjects[m_nObjects - 6]->SetColor(XMFLOAT3(0.25f, 0.75f, 0.65f));
-
-	m_ppObjects[m_nObjects - 5] = new CGameObject();
-	m_ppObjects[m_nObjects - 5]->SetMesh(pUfoMesh);
-	m_ppObjects[m_nObjects - 5]->SetShader(pShader);
-	m_ppObjects[m_nObjects - 5]->SetPosition(10.0f, 31.0f, 20.0f);
-	m_ppObjects[m_nObjects - 5]->Rotate(0.0f, 180.0f, 0.0f);
-	m_ppObjects[m_nObjects - 5]->SetColor(XMFLOAT3(0.25f, 0.75f, 0.65f));
-
-	m_ppObjects[m_nObjects - 4] = new CGameObject();
-	m_ppObjects[m_nObjects - 4]->SetMesh(pUfoMesh);
-	m_ppObjects[m_nObjects - 4]->SetShader(pShader);
-	m_ppObjects[m_nObjects - 4]->SetPosition(-20.0f, 31.0f, 20.0f);
-	m_ppObjects[m_nObjects - 4]->Rotate(0.0f, 180.0f, 0.0f);
-	m_ppObjects[m_nObjects - 4]->SetColor(XMFLOAT3(0.25f, 0.75f, 0.65f));
-
-	m_ppObjects[m_nObjects - 3] = new CGameObject();
-	m_ppObjects[m_nObjects - 3]->SetMesh(pUfoMesh);
-	m_ppObjects[m_nObjects - 3]->SetShader(pShader);
-	m_ppObjects[m_nObjects - 3]->SetPosition(20.0f, 31.0f, 20.0f);
-	m_ppObjects[m_nObjects - 3]->Rotate(0.0f, 180.0f, 0.0f);
-	m_ppObjects[m_nObjects - 3]->SetColor(XMFLOAT3(0.25f, 0.75f, 0.65f));
-
-	m_ppObjects[m_nObjects - 2] = new CGameObject();
-	m_ppObjects[m_nObjects - 2]->SetMesh(pUfoMesh);
-	m_ppObjects[m_nObjects - 2]->SetShader(pShader);
-	m_ppObjects[m_nObjects - 2]->SetPosition(-25.0f, 31.0f, 20.0f);
-	m_ppObjects[m_nObjects - 2]->Rotate(0.0f, 180.0f, 0.0f);
-	m_ppObjects[m_nObjects - 2]->SetColor(XMFLOAT3(0.25f, 0.75f, 0.65f));
-
-	//Cube
+	//Bullet
 	CMesh* pCubeMesh = new CMesh(pd3dDevice, pd3dCommandList, "Models/Cube.txt");
-
 	for (int i = m_nObjects - 1; i < m_nObjects + mBulletCount; i++) {
 		m_ppObjects[i] = new CGameObject();
 		m_ppObjects[i]->bBulletcheck = true;
@@ -157,12 +94,13 @@ void CScene::LoadSceneObjectsFromFile(ID3D12Device *pd3dDevice, ID3D12GraphicsCo
 		m_ppObjects[i]->SetPosition(0.0f, -1000000.0f, 0.0f);
 	}
 
+	//Particle
 	for (int i = m_nObjects + mBulletCount - 1; i < m_nObjects + mBulletCount + iParticleCube; i++) {
 		m_ppObjects[i] = new CGameObject();
 		m_ppObjects[i]->bParticlecheck = true;
 		m_ppObjects[i]->iParticleNum = i - m_nObjects - mBulletCount + 1;
 		m_ppObjects[i]->SetMesh(pCubeMesh);
-		m_ppObjects[i]->SetColor(XMFLOAT3(1.0f, 1.0f, 0.0f));
+		m_ppObjects[i]->SetColor(XMFLOAT3(0.0f, 1.0f, 1.0f));
 		m_ppObjects[i]->SetPosition(0.0f, -100000.0f, 0.0f);
 	}
 }
@@ -171,14 +109,14 @@ void CScene::BuildObjects(ID3D12Device *pd3dDevice, ID3D12GraphicsCommandList *p
 {
 	m_pd3dGraphicsRootSignature = CreateGraphicsRootSignature(pd3dDevice);
 
+	//맵생성
 	LoadSceneObjectsFromFile(pd3dDevice, pd3dCommandList, (char *)"Models/Scene.bin");
 }
 
 void CScene::BuildBullet(CPlayer& pPlayer, int iChooseBullet)
 {
 	m_ppObjects[m_nObjects + iChooseBullet]->SetPosition(pPlayer.GetPosition());
-	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf4x4World = pPlayer.m_xmf4x4World;		//플레이어의 벡터 복사 -> 날아가는 방향 조절
-	
+	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf4x4World = pPlayer.m_xmf4x4World;		//플레이어의 벡터 복사 -> 총알 날아가는 방향 조절
 	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf3BulletLook = pPlayer.GetLookVector();
 	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf3BulletUp = pPlayer.GetUpVector();
 	m_ppObjects[m_nObjects + iChooseBullet]->m_xmf3BulletRight = pPlayer.GetRightVector();
@@ -233,7 +171,7 @@ void CScene::ReleaseObjects()
 
 	if (m_ppObjects)
 	{
-		for (int j = 0; j < m_nObjects; j++) if (m_ppObjects[j]) delete m_ppObjects[j];
+		for (int j = 0; j < m_nObjects + mBulletCount + iParticleCube; j++) if (m_ppObjects[j]) delete m_ppObjects[j];
 		delete[] m_ppObjects;
 	}
 }
@@ -242,7 +180,7 @@ void CScene::ReleaseUploadBuffers()
 {
 	if (m_ppObjects)
 	{
-		for (int j = 0; j < m_nObjects; j++) if (m_ppObjects[j]) m_ppObjects[j]->ReleaseUploadBuffers();
+		for (int j = 0; j < m_nObjects + mBulletCount + iParticleCube; j++) if (m_ppObjects[j]) m_ppObjects[j]->ReleaseUploadBuffers();
 	}
 }
 
@@ -263,36 +201,23 @@ bool CScene::ProcessInput()
 
 void CScene::AnimateObjects(float fTimeElapsed)
 {
+	//적 갱신
 	for (int j = m_nObjects - m_nEnemyObjects - 1; j < m_nObjects; j++)
 	{
-		m_ppObjects[j]->Animate(fTimeElapsed);
-		//if (m_ppObjects[j]->fEnemyRestart < 0) {
-		//	m_ppObjects[j]->SetPosition(XMFLOAT3((float)(rand() % 50 + 40), (float)(rand() % 20 + 20), (float)(rand() % 120 + 50)));
-		//}
-		//else if(m_ppObjects[j]->fEnemyRestart > 0){
-		//	m_ppObjects[j]->fEnemyRestart--;
-		//}
-	}
-	for (int j = m_nObjects - m_nEnemyObjects - 1; j < m_nObjects - 1; j++)
-	{
 		if (m_ppObjects[j]) {
-			m_ppObjects[j]->MoveRandom();
+			m_ppObjects[j]->Animate(fTimeElapsed);
+			m_ppObjects[j]->MoveRandom(fTimeElapsed);
 			m_ppObjects[j]->aabb = BoundingBox(m_ppObjects[j]->GetPosition(), XMFLOAT3(3.0f, 2.0f, 3.0f));
 		}
-		
 	}
+
+	//총알 갱신
 	for (int i = m_nObjects - 1; i < m_nObjects + mBulletCount; i++)
 	{
 		m_ppObjects[i]->Animate(fTimeElapsed);
 		m_ppObjects[i]->aabb = BoundingBox(m_ppObjects[i]->GetPosition(), XMFLOAT3(1.0f, 1.0f, 1.0f));
-	}
 
-	for (int i = m_nObjects + mBulletCount - 1; i < m_nObjects + mBulletCount + iParticleCube; i++)
-	{
-		m_ppObjects[i]->Animate(fTimeElapsed);
-	}
-	
-	for (int i = m_nObjects - 1; i < m_nObjects + mBulletCount; i++) {
+		//Cruch_check
 		if (m_ppObjects[i]->bShootcheck == true) {
 			for (int j = m_nObjects - m_nEnemyObjects - 1; j < m_nObjects - 1; j++) {
 				if (m_ppObjects[i]->aabb.Intersects(m_ppObjects[j]->aabb)) {
@@ -303,17 +228,23 @@ void CScene::AnimateObjects(float fTimeElapsed)
 					//파티클
 					for (int k = m_nObjects + mBulletCount - 1; k < m_nObjects + mBulletCount + iParticleCube; k++) {
 						m_ppObjects[k]->SetPosition(m_ppObjects[j]->GetPosition());
-						m_ppObjects[k]->fSplashTime = 500;
+						m_ppObjects[k]->fSplashTime = 0.4;
 					}
 
 					//적 소멸
 					m_ppObjects[j]->SetPosition(0.0f, 1000000.0f, 0.0f);
-					m_ppObjects[j]->fEnemyRestart = 1000;
+					m_ppObjects[j]->fEnemyRestart = 5;
 
 					break;
 				}
 			}
 		}
+	}
+
+	//파티클효과
+	for (int i = m_nObjects + mBulletCount - 1; i < m_nObjects + mBulletCount + iParticleCube; i++)
+	{
+		m_ppObjects[i]->Animate(fTimeElapsed);
 	}
 }
 

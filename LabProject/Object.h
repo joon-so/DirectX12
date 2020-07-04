@@ -1,7 +1,3 @@
-//------------------------------------------------------- ----------------------
-// File: Object.h
-//-----------------------------------------------------------------------------
-
 #pragma once
 
 #include "Mesh.h"
@@ -15,23 +11,26 @@ public:
 	CGameObject();
 	virtual ~CGameObject();
 
+private:
+	float							fSplashSpeed = 10.0f;
+	float							fBulletSpeed = 300.0f;
+	float							fEnemySpeed;
+	float							iDirectionChange = rand() % 2 + 0.4f;
+
 public:
 	char							m_pstrName[64] = { '\0' };
-	int iMoveDirection;
-	float fEnemySpeed;
-	float fEnemyRestart = -1;
-	int iDirectionChange = 0;
-	float fBulletSpeed = 0.5f;
-	bool bBulletcheck = false;
-	bool bShootcheck = false;
-	bool bParticlecheck = false;
-	int iParticleNum = 0;
-	float fSplashTime = 0;
-	float fSplashSpeed = 0.008f;
-	XMFLOAT3 m_xmf3BulletLook = XMFLOAT3(0.0f, 0.0f, 1.0f);
-	XMFLOAT3 m_xmf3BulletRight = XMFLOAT3(1.0f, 0.0f, 0.0f);
-	XMFLOAT3 m_xmf3BulletUp = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	BoundingBox aabb;
+	int								iMoveDirection;
+	float							fEnemyRestart = -1;
+	bool							bBulletcheck = false;
+	bool							bShootcheck = false;
+	bool							bParticlecheck = false;
+	int								iParticleNum = 0;
+	float							fSplashTime = 0;
+
+	XMFLOAT3						m_xmf3BulletLook = XMFLOAT3(0.0f, 0.0f, 1.0f);
+	XMFLOAT3						m_xmf3BulletRight = XMFLOAT3(1.0f, 0.0f, 0.0f);
+	XMFLOAT3						m_xmf3BulletUp = XMFLOAT3(0.0f, 1.0f, 0.0f);
+	BoundingBox						aabb;
 
 	XMFLOAT4X4						m_xmf4x4World;
 	CMesh							*m_pMesh = NULL;
@@ -67,18 +66,11 @@ public:
 	void MoveStrafe(float fDistance = 1.0f);
 	void MoveUp(float fDistance = 1.0f);
 	void MoveForward(float fDistance = 1.0f);
-	void MoveRandom();
-	void BulletMove();
-	void Particle();
+	void MoveRandom(float fTimeElapsed);
+	void BulletMove(float fTimeElapsed);
+	void Particle(float fTimeElapsed);
 
 
 	void Rotate(float fPitch = 10.0f, float fYaw = 10.0f, float fRoll = 10.0f);
 	void Rotate(XMFLOAT3 *pxmf3Axis, float fAngle);
-};
-
-class CUfoObject : public CGameObject
-{
-public:
-	CUfoObject();
-	virtual ~CUfoObject();
 };
